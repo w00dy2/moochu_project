@@ -1,0 +1,29 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'mlist.css' %}">
+  <div class="row justify-content-center" style="text-align: center;">
+    <div class="col-12 text-center"  style="text-align: center;">
+{% load i18n %}
+
+{% if page_obj.has_previous %}
+  <a href="/mlist/page=1/?page=1" class="page-button">&laquo;</a>
+  <a href="/mlist/page={{ page_obj.previous_page_number }}" class="page-button">{% trans '이전' %}</a>
+{% else %}
+  <span class="page-button">&laquo;</span>
+  <span class="page-button">{% trans 'previous' %}</span>
+{% endif %}
+
+{% for button_page, is_current in paginator %}
+    {% if button_page == -1 %}
+        <span class="ellipsis">...</span>
+    {% else %}
+        <a href="/mlist/page={{ button_page }}" class="page-button {% if is_current %}current{% endif %}">{% if is_current %}<strong>{{ button_page }}</strong>{% else %}{{ button_page }}{% endif %}</a>
+    {% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+  <a href="/mlist/page={{ page_obj.next_page_number }}" class="page-button">{% trans 'next' %}</a>
+  <a href="/mlist/page={{ paginator.num_pages }}" class="page-button">&raquo;</a>
+{% else %}
+  <span class="page-button">{% trans '다음' %}</span>
+  <span class="page-button">&raquo;</span>
+{% endif %}

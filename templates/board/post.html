@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}post{% endblock %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'board.css' %}">
+
+    <div class="container">
+        <h3><a href="{% url 'board:moobo' %}" style="text-decoration-line: underline; text-decoration-style: double; text-underline-offset : 5px;">MooChu Board</a></h3>
+        <ul class="board-menu">
+            <li><a href="{% url 'board:moobo' %}">Board</a></li>
+            <li><a href="{% url 'board:post' %}">Upload</a></li>
+            {% if user.id %}
+                <li><a href="{% url 'board:my_posts' user.id %}">My Posts</a></li>
+            {% endif %}
+		</ul>
+        <h5 class="my-3 border-bottom pb-2">게시글 작성</h5>
+        <form method="post" class="post-form my-3">
+            {% csrf_token %}
+            <!-- 오류표시 Start -->
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                {% for field in form %}
+                    {% if field.errors %}
+                    <strong>{{ field.label }}</strong>
+                    {{ field.errors }}
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% endif %}
+            <!-- 오류표시 End -->
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" name="title" id="title"
+                       value="{{ form.title.value|default_if_none:'' }}">
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea class="form-control" name="content"
+                          id="content" rows="15">{{ form.content.value|default_if_none:'' }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-moobo" style="margin-bottom: 100px;">업로드하기</button>
+        </form>
+    </div>
+{% endblock %}

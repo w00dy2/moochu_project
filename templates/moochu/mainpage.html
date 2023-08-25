@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+{% block title %}moochu{% endblock %}
+{% load static %}
+{% load hanja_filter %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'mainpage.css' %}">
+
+  <!-- slick 스타일시트 -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
+  <!-- slick 자바스크립트 파일 -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+
+
+<body>
+
+  <!-- 양 옆 간격 맞추기 위한 컨테이너 묶기  -->
+  <div class="container">
+
+    <!-- 어제 많이 조회한 미디어 TOP 10 -->
+    <h1 style="color: #96FC72;font-family: Chonburi;">MooChu's <span style="color:white;">TOP 10</span> Today</h1>
+    <div class="row" style="margin-top: 20px;">
+
+      <!-- 왼쪽 포스터 표시  -->
+      <div class="top-ranking-left">
+        <a href="{% url 'moochu:movie_detail' movie_id=top1.id %}" style="text-decoration: none;">
+        <div class="top1-card ">
+          <div class="main-row">
+            <!-- 카드 안에서 왼쪽  -->
+              <div class="top1-card-left">
+                <img src="https://storage.googleapis.com/end_moochu/{{top1.id}}.jpg" class="main-card-img" alt="Top1 영화 포스터">
+              </div>
+            <!-- 카드 안에서 오른쪽  -->
+            <div class="top1-card-right">
+              <div class="main-card-body">
+                  <!-- 미디어 제목 부분 -->
+                  {% if top1.title|hanja_style %}
+                  <h4 class="main-card-title">{{top1.title|hanja_style|safe}}</h5>
+                  {% else %}
+                  <h4 class="main-card-title">{{top1.title|safe}}</h5>
+                  {% endif %}
+                    <!-- 미디어 줄거리 넣기 -->
+                    <p class="main-card-text">{{top1.synopsis|truncatechars:200 }}</p>
+                  
+                  <!-- 미디어 최신 리뷰 1개 -->
+                <div class="top-review">
+                  {% if top1.title|hanja_style %}
+                  <h5 class="top-review-title">{{ top1.title|hanja_style|safe }}</h5>
+                  {% else %}
+                  <h5 class="top-review-title">{{ top1.title|safe }}</h5>
+                  {% endif %}
+                  {% if top1_review %}
+                  <p class="top-review-coment">{{ top1_review.content }}</p>
+                  <div class="top-review-user">{{ top1_review.writer.nickname }}</div>
+                  {% else %}
+                  <p class="top-review-coment">아직 리뷰가 없습니다.</p>
+                  {% endif %}
+                </div>
+              </div>            <!-- main-card-body 끝 -->
+            </div>              <!-- top1-card-right 끝 -->
+          </div>                <!-- main-row 끝 -->
+        </div>                  <!-- top1-card 끝 -->
+      </a>
+      </div>                    <!-- top-ranking-left 끝 -->
+
+
+      <!-- 오른쪽 포스터 표시  -->
+      <div class="top-ranking-right">
+        <div class="scroll-box" >
+                <!-- Media-1 표시  -->
+                {%for media in top2 %}
+          <a href="{% url 'moochu:movie_detail' movie_id=media.id %}" style="text-decoration: none;">
+            <div class="main-card">
+            <div class="main-row">
+              <!-- 카드 안에서 왼쪽  -->
+              <div class="right-card-left">
+                <img src="https://storage.googleapis.com/end_moochu/{{media.id}}.jpg" class="main-card-img" alt="Top{{i}} 영화 포스터">
+              </div>
+              <!-- 카드 안에서 오른쪽  -->
+              <div class="right-card-right">
+                <div class="main-card-body">
+                  {% if media.title|hanja_style %}
+                  <h5 class="main-card-title">{{ media.title|truncatechars:14|hanja_style|safe  }}</h5>
+                  {% else %}
+                  <h5 class="main-card-title">{{ media.title|truncatechars:14|safe  }}</h5>
+                  {% endif %}
+                  <p class="main-card-text">{{ media.synopsis|truncatechars:60 }}</p>
+                </div>
+              </div>
+            </div>
+          </div></a>        <!-- Media-1 표시 끝 -->
+        {% endfor %}
+          
+        </div>  
+      </div>    <!-- 오른쪽 포스터 표시 끝-->
+    </div>     <!-- div.row 오늘의 미디어 TOP10 끝 -->
+        
+  
+
+{% if request.user.id %}
+     
+    <!-- 추천 모델에서 나온 미디어 추천 -->
+    
+    <h1 style="color: #96FC72; margin-top:70px;">{{request.user.nickname}}님의 추천영화</h1>
+    
+    {% if recommendation %}
+    <div class="poster-container">
+      <div class="poster-slider">
+        {% for id in recommendation %}
+        <a href="{% url 'moochu:movie_detail' movie_id=id %}"><img class="poster-img" src="https://storage.googleapis.com/end_moochu/{{id}}.jpg" ></a>
+        {% endfor %}
+      </div>
+      <button class="slider-btn slider-btn-prev">&#8249;</button>
+      <button class="slider-btn slider-btn-next">&#8250;</button>
+    </div>
+    {% else %}
+      <h3 style="color: #96FC72; /* 글자 색상 코드 입력 */">관심 장르를 선택하시면 추천 미디어를 확인하실 수 있습니다.</h1>
+
+      <a href="{% url 'common:genre_selection' %}"> 장르 선택하러 가기 </a>
+    {% endif %}
+{% endif %}  
+    <!-- 미디어 추천 슬라이드 JAVA SCRIPT -->
+    <script>
+      const slider = document.querySelector('.poster-slider');
+      const prevBtn = document.querySelector('.slider-btn-prev');
+      const nextBtn = document.querySelector('.slider-btn-next');
+      const posterWidth = document.querySelector('.poster-img').offsetWidth;
+      const posterCount = slider.childElementCount; // 이미지 개수
+      let slideIndex = 0;
+  
+      prevBtn.addEventListener('click', () => {
+          slideIndex = slideIndex - 5;
+          if (slideIndex < 0) {
+              slideIndex = 0;
+          }
+          slideToIndex(slideIndex);
+      });
+  
+      nextBtn.addEventListener('click', () => {
+          slideIndex = slideIndex + 5;
+          const maxIndex = posterCount - (posterCount % 5 || 5); // 보여질 이미지 개수로 나눈 나머지 값이 0이 아니면 나머지 값, 0이면 보여질 이미지 개수
+          if (slideIndex > maxIndex) {
+              slideIndex = maxIndex;
+          }
+          slideToIndex(slideIndex);
+      });
+  
+      function slideToIndex(index) {
+          const lastIndex = posterCount - 5; // 마지막 슬라이드 인덱스
+          if (index > lastIndex) {
+              index = lastIndex+1; // 마지막 슬라이드를 넘지 못하도록 설정
+          }
+          const translateX = -index * posterWidth;
+          slider.style.transform = `translateX(${translateX}px)`;
+      }
+  
+    </script>
+
+
+
+
+    <!-- 최신리뷰 10개 ? -->
+    <div class="d-flex align-items-center" style= margin-top:50px;">
+      <h1 style="color: #96FC72;">최신 리뷰 한줄평</h1>
+      {% if reviews %}
+      <a class="btn review-all" style="margin-left: auto; margin-right: 20px; margin-top:30px;" href="{% url 'review:review' %}">리뷰 <span style="color:#96FC72; font-family: Chonburi;">{{review_count}}</span>개 모두 보러 가기▶︎</a>
+      {% endif %}
+    </div>
+    <div class="reviews-container">
+      <div class="reviews-slider1">
+        {% for item in combined_data %}
+        <div class="review-card">
+          <a class="review-content" style="text-decoration: none;" href="{% url 'review:review_detail' movie_id=item.review.media_id review_id=item.review.id %}">
+            {% if item.movie.title|hanja_style %}
+            <h5 class="reviews-card-title">{{ item.movie.title|hanja_style|safe }}</h5>
+            {% else %}
+            <h5 class="reviews-card-title">{{ item.movie.title|safe }}</h5>
+            {% endif %}
+            <p class="reviews-coment">{{ item.review.content }}</p>
+            <div class="review-user"> {{ item.review.writer.nickname }}</div>
+          </a>
+        </div>
+        {% endfor %}
+       
+      </div>
+      <button class="slider-btn2 slider-btn-prev2">&#8249;</button>
+      <button class="slider-btn2 slider-btn-next2">&#8250;</button>
+    </div>
+
+    <!-- 최신 리뷰 슬라이드 JAVA SCRIPT -->
+    <script>
+      const slider2 = document.querySelector('.reviews-slider1');
+      const prevBtn2 = document.querySelector('.slider-btn-prev2');
+      const nextBtn2 = document.querySelector('.slider-btn-next2');
+      const reviewWidth2 = document.querySelector('.review-card').offsetWidth;
+      const reviewCount2 = slider2.childElementCount; // 카드 개수
+      let slideIndex2 = 0;
+
+      prevBtn2.addEventListener('click', () => {
+          slideIndex2 = slideIndex2 - 2;
+          if (slideIndex2 < 0) {
+              slideIndex2 = 0;
+          }
+          slideToIndex2(slideIndex2);
+      });
+
+      nextBtn2.addEventListener('click', () => {
+          slideIndex2 = slideIndex2 + 2;
+          const maxIndex2 = reviewCount2 - (reviewCount2 % 5 || 5); // 보여질 이미지 개수로 나눈 나머지 값이 0이 아니면 나머지 값, 0이면 보여질 이미지 개수
+          if (slideIndex2 > maxIndex2) {
+              slideIndex2 = maxIndex2;
+          }
+          slideToIndex2(slideIndex2);
+      });
+
+      function slideToIndex2(index2) {
+          const lastIndex2 = reviewCount2 - 3; // 마지막 슬라이드 인덱스
+          if (index2 > lastIndex2) {
+              index2 = lastIndex2-1; // 마지막 슬라이드를 넘지 못하도록 설정
+          }
+          const translateX2 = -index2 * reviewWidth2;
+          slider2.style.transform = `translateX(${translateX2}px)`;
+      }
+
+    </script>
+  
+    
+      
+    <!-- 사용자가 최근에 본 미디어 -->
+    {% if recent %}
+    <h1 style="color: #96FC72; margin-top:70px;">{{request.user.nickname}}님이 최근 본 미디어</h1>
+    
+    <div class="poster-container1">
+      <div class="poster-slider1">
+        {% for media in recent %}
+          <a href="{% url 'moochu:movie_detail' movie_id=media.id %}"><img class="poster-img1" src="https://storage.googleapis.com/end_moochu/{{media.id}}.jpg" ></a>
+        {% endfor %}
+       
+      </div>
+      <button class="slider-btn1 slider-btn-prev1">&#8249;</button>
+      <button class="slider-btn1 slider-btn-next1">&#8250;</button>
+    </div>
+    {% endif %}
+
+    <!-- 최근 본 미디어 슬라이드 JAVA SCRIPT -->
+    <script>
+      const slider1 = document.querySelector('.poster-slider1');
+      const prevBtn1 = document.querySelector('.slider-btn-prev1');
+      const nextBtn1 = document.querySelector('.slider-btn-next1');
+      const posterWidth1 = document.querySelector('.poster-img1').offsetWidth;
+      const posterCount1 = slider1.childElementCount; // 이미지 개수
+      let slideIndex1 = 0;
+
+      prevBtn1.addEventListener('click', () => {
+          slideIndex1 = slideIndex1 - 5;
+          if (slideIndex1 < 0) {
+              slideIndex1 = 0;
+          }
+          slideToIndex1(slideIndex1);
+      });
+
+      nextBtn1.addEventListener('click', () => {
+          slideIndex1 = slideIndex1 + 5;
+          const maxIndex1 = posterCount1 - (posterCount1 % 5 || 5); // 보여질 이미지 개수로 나눈 나머지 값이 0이 아니면 나머지 값, 0이면 보여질 이미지 개수
+          if (slideIndex1 > maxIndex1) {
+              slideIndex1 = maxIndex1;
+          }
+          slideToIndex1(slideIndex1);
+      });
+
+      function slideToIndex1(index1) {
+          const lastIndex1 = posterCount1 - 5; // 마지막 슬라이드 인덱스
+          if (index1 > lastIndex1) {
+              index1 = lastIndex1+1; // 마지막 슬라이드를 넘지 못하도록 설정
+          }
+          const translateX1 = -index1 * posterWidth1;
+          slider1.style.transform = `translateX(${translateX1}px)`;
+      }
+
+    </script>
+
+
+    <!-- 인기영화 리스트  -->
+    
+    <h1 style="color: #96FC72; margin-top:70px;">인기 영화</h1>
+    
+    <div class="poster-container3" style="margin-bottom: 10%;">
+      <div class="poster-slider3">
+        {% for media in popu %}
+          <a href="{% url 'moochu:movie_detail' movie_id=media.id %}"><img class="poster-img3" src="https://storage.googleapis.com/end_moochu/{{media.id}}.jpg" ></a>
+        {% endfor %}
+       
+      </div>
+      <button class="slider-btn3 slider-btn-prev3">&#8249;</button>
+      <button class="slider-btn3 slider-btn-next3">&#8250;</button>
+    </div>
+   
+
+    <!-- 인기 영화  슬라이드 JAVA SCRIPT -->
+    <script>
+      const slider3 = document.querySelector('.poster-slider3');
+      const prevBtn3 = document.querySelector('.slider-btn-prev3');
+      const nextBtn3 = document.querySelector('.slider-btn-next3');
+      const posterWidth3 = document.querySelector('.poster-img3').offsetWidth;
+      const posterCount3 = slider3.childElementCount; // 이미지 개수
+      let slideIndex3 = 0;
+
+      prevBtn3.addEventListener('click', () => {
+          slideIndex3 = slideIndex3 - 5;
+          if (slideIndex3 < 0) {
+              slideIndex3 = 0;
+          }
+          slideToIndex3(slideIndex3);
+      });
+
+      nextBtn3.addEventListener('click', () => {
+          slideIndex3 = slideIndex3 + 5;
+          const maxIndex3 = posterCount3 - (posterCount3 % 5 || 5); // 보여질 이미지 개수로 나눈 나머지 값이 0이 아니면 나머지 값, 0이면 보여질 이미지 개수
+          if (slideIndex3 > maxIndex3) {
+              slideIndex3 = maxIndex3;
+          }
+          slideToIndex3(slideIndex3);
+      });
+
+      function slideToIndex3(index3) {
+          const lastIndex3 = posterCount3 - 5; // 마지막 슬라이드 인덱스
+          if (index3 > lastIndex3) {
+              index3 = lastIndex3+4; // 마지막 슬라이드를 넘지 못하도록 설정
+          }
+          const translateX3 = -index3 * posterWidth3;
+          slider3.style.transform = `translateX(${translateX3}px)`;
+      }
+
+    </script>
+
+  </div>       <!-- div.container-->
+</body>
+
+
+</html>
+
+{% endblock %}

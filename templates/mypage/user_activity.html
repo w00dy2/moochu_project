@@ -1,0 +1,96 @@
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="bookcover">
+      <div class="bookdot">
+        <div class="page">
+					<!-- 왼쪽 프로필 페이지 구성요소 -->
+          {% include "mypage/profile.html" %}
+
+
+          <div class="content-container">
+            <div class="header content-title">
+              <div class="content-title-name"><span style="color: #FF8540;">{{ master.nickname }}</span> 님의 마이페이지</div>
+            </div>
+
+            <div class="box content-box">
+              <div class="scroll-box">
+                <div class="box-title">
+                  {{ master.nickname }}님이 남긴 리뷰
+                  {% if reviews.count > 6 %}
+                    <a class="toggle-reviews" href="{% url 'mypage:reviews_total' nickname=master.nickname %}">
+                    전체보기
+                  </a>
+                  {% endif %}
+                </div>
+
+                <div class="review-container"> 
+                  {% if reviews %}
+                  {% for review in reviews %} 
+                  <span class="review-text">{{review.content}}</span>
+                  <hr>
+                  {% endfor %}
+                  {% else %}
+                    <h2>남긴 리뷰가 없습니다.</h2>
+                  {% endif %} 
+                </div>  
+                <br />
+
+
+                <div class="box-title">{{ master.nickname }}님이 남긴 평점<a class="toggle-votes">
+                  {% if votes.count > 8 %}
+                  <a href="{% url 'mypage:votes' nickname=master.nickname %}" id="view-all-votes">
+                    전체보기
+                  </a>
+                  {% endif %}
+                </div>
+
+                <div class="card-container-vote">
+                  {% if votes %}
+                  {% for vote in votes %}
+                  <div class="card">
+                    <a href="{% url 'moochu:movie_detail' movie_id=vote.media_id %}"><img class="card-img" src='https://storage.googleapis.com/end_moochu/{{vote.media_id}}.jpg' alt="영화 포스터"></a>
+                    <span class="card-text"><a style="color: #96FC72"> ★ </a>{{vote.rating}}</span>
+                  </div>
+                  {% endfor %}
+                  {% else %}
+                    <h1> 남긴 평점이 없습니다. </h1>
+                  {% endif %}
+                </div>
+                  
+                            
+              </div>
+              
+            </div>
+
+          </div>
+          
+          <!-- 메뉴 버튼 구성 요소-->
+          {% include "mypage/menu.html" %}
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  // 모든 card-text 요소에 대해 처리
+  const cardTexts = document.querySelectorAll('.card-text');
+  cardTexts.forEach((cardText) => {
+    const text = cardText.textContent;
+    const maxLength = 10; // 최대 길이 설정
+    if (text.length > maxLength) {
+      const truncatedText = text.substring(0, maxLength) + '...';
+      cardText.textContent = truncatedText;
+      cardText.addEventListener('click', function () {
+        if (cardText.textContent === truncatedText) {
+          cardText.textContent = text;
+        } else {
+          cardText.textContent = truncatedText;
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

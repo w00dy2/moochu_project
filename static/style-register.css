@@ -1,0 +1,94 @@
+
+/* error messagae 글씨 색상 */
+.error-message{
+  font-family: 'NanumBarunpen';
+  color: red;
+  font-size: 18px;
+  font-weight: 600;
+}
+/* 아이디, 비밀번호, 닉네임, 생년월일, 이메일 입력창 크기 */
+.form-control{
+  width: 400px;
+  flex-shrink: 0;
+  font-size: 18px;
+  font-family: 'NanumBarunpen';
+  height:3rem;
+}
+/* 성별 입력창 크기 */
+.select{
+  width: 400px;
+  flex-shrink: 0;
+  font-size: 18px;
+  font-family: 'NanumBarunpen';
+  height: 3rem;
+  padding: 5px 30px 5px 10px;
+  border-radius: 4px;
+  outline: none;
+  background-color: #fff;
+}
+
+/* register 버튼 */
+.register-btn{
+  width: 200px;
+  height: 50px;
+  flex-shrink: 0;
+  margin-bottom: 15px;
+  background: #96FC72;
+  border-radius: 0.3rem;
+  border-color: transparent;
+  font-size: 1.5rem;
+  font-family: NanumBarunpen;
+}
+/* register 버튼 글씨 폰트 */
+.register-font{
+  display: flex;
+  color: #96FC72;
+  font-size: 25px;
+  width: 400px;
+  height: 40px;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* register 관련한 전체 정보에 대한 박스 */
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:auto;
+  margin-top: 30px;
+}
+.register-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 아이디, 비밀번호, 닉네임, 성별, 생년월일, 이메일 글씨 폰트 */
+label{
+  font-family: NanumBarunpen;
+}
+
+/* login으로 이동하시겠습니까~ 에 대한 css */
+.a-1 {
+  justify-content: end;
+  color: #96FC72;
+  font-size: 15px;
+  font-family: NanumBarunpen;
+  text-decoration: none;
+}
+/* login으로 이동하시겠습니까~ 에 마우스 가져다 댔을 때 css */
+.a-1:hover {
+  justify-content: end;
+  color: #96FC72;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: NanumBarunpen;
+  text-decoration: none;
+}  
+

@@ -1,0 +1,196 @@
+
+.nav {
+    background-image: none; /* 배경 이미지 제거 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: sticky;
+    top: 0;
+}
+
+.nav-logo img {
+    max-height: 60px; /* 이미지의 최대 높이 지정 */
+    margin-bottom: 10px;
+}
+ 
+.nav-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  overflow: auto;
+  justify-content: flex-end;
+}
+.navbar{
+  margin-bottom:0;
+}
+.navbar-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links li {
+  margin-right: 5px;
+}
+/* 메뉴(카테고리) 기본 디자인 */
+.nav-links a {
+  font-family: NanumBarunpen;
+  color: #96FC72;
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: 900;
+  padding: 3px 3px;
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+.nav-search{
+  font-size: 30px;
+}
+/* 메뉴(카테고리)에 마우스 가져다 댔을 때 변환 모양*/
+.nav-links a:hover {
+  background-color: #96FC72;
+  color: #414141;
+}
+
+.nav {
+  display: flex;
+}
+
+h1 {
+    margin-top: 30px;
+  }
+
+ul {
+  text-align: center;
+}
+
+li {
+  display: inline-block;
+  margin: 50px;
+}
+
+/* 로고 기본 모양*/
+/* 마이페이지 a 태그랑 겹쳐서 변경 */
+.a-nav {  
+  font-size: 50px;
+  text-decoration: none;
+  color: #96FC72;
+  padding: 5px 0;
+}
+
+/* 로고에 마우스 가져다 댔을 때 변환 모양*/
+.a-nav:hover {
+  color: #96FC72;
+  text-decoration: none;
+}
+
+.nav-link1{
+  font-family: 'NanumBarunpen';
+  color: #96FC72;
+  text-decoration: none;
+  font-size: 16px;
+}
+.nav-link1:hover{
+  color: white;
+  text-decoration: none;
+}
+.navbar-nav {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 5px;
+}
+
+
+
+.dropdown-divider {
+  height: 0;
+  margin: var(--bs-dropdown-divider-margin-y) 0;
+  overflow: hidden;
+  border-top: 1px solid var(--bs-dropdown-divider-bg);
+  opacity: 1;
+}
+
+.dropdown-menu {
+  --bs-dropdown-zindex: 1000;
+  --bs-dropdown-min-width: 10rem;
+  --bs-dropdown-padding-x: 0;
+  --bs-dropdown-padding-y: 0.5rem;
+  --bs-dropdown-spacer: 0.125rem;
+  --bs-dropdown-font-size: 1rem;
+  --bs-dropdown-color: #212529;
+  --bs-dropdown-bg: #fff;
+  --bs-dropdown-border-color: var(--bs-border-color-translucent);
+  --bs-dropdown-border-radius: 0.375rem;
+  --bs-dropdown-border-width: 1px;
+  --bs-dropdown-inner-border-radius: calc(0.375rem - 1px);
+  --bs-dropdown-divider-bg: var(--bs-border-color-translucent);
+  --bs-dropdown-divider-margin-y: 0.5rem;
+  --bs-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --bs-dropdown-link-color: #212529;
+  --bs-dropdown-link-hover-color: #1e2125;
+  --bs-dropdown-link-hover-bg: #e9ecef;
+  --bs-dropdown-link-active-color: #fff;
+  --bs-dropdown-link-active-bg: #0d6efd;
+  --bs-dropdown-link-disabled-color: #adb5bd;
+  --bs-dropdown-item-padding-x: 1rem;
+  --bs-dropdown-item-padding-y: 0.25rem;
+  --bs-dropdown-header-color: #6c757d;
+  --bs-dropdown-header-padding-x: 1rem;
+  --bs-dropdown-header-padding-y: 0.5rem;
+  position: absolute;
+  z-index: var(--bs-dropdown-zindex);
+  display: none;
+  min-width: var(--bs-dropdown-min-width);
+  padding: var(--bs-dropdown-padding-y) var(--bs-dropdown-padding-x);
+  margin: 0;
+  font-size: var(--bs-dropdown-font-size);
+  color: var(--bs-dropdown-color);
+  text-align: left;
+  list-style: none;
+  background-color: var(--bs-dropdown-bg);
+  background-clip: padding-box;
+  border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
+  border-radius: var(--bs-dropdown-border-radius);
+}
+.dropdown-menu[data-bs-popper] {
+  top: 100%;
+  left: 0;
+  margin-top: var(--bs-dropdown-spacer);
+}
+
+.dropdown-menu-start {
+  --bs-position: start;
+}
+.dropdown-menu-start[data-bs-popper] {
+  right: auto;
+  left: 0;
+}
+
+.dropdown-menu-end {
+  --bs-position: end;
+}
+.dropdown-menu-end[data-bs-popper] {
+  right: 0;
+  left: auto;
+}
+
+
+.dropdown-menu {
+  background-color: #2C2E34;
+  color: #96FC72;
+  text-align: center;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #2C2E34;
+} 
+
+.dropdown-divider{
+  background-color: #2C2E34;
+}
+
+
+
+

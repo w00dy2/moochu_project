@@ -1,0 +1,189 @@
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}
+
+<style>
+  .card {
+  --bs-card-spacer-y: 1rem;
+  --bs-card-spacer-x: 1rem;
+  --bs-card-title-spacer-y: 0.5rem;
+  --bs-card-border-width: 1px;
+  --bs-card-border-color: var(--bs-border-color-translucent);
+  --bs-card-border-radius: 0.375rem;
+  --bs-card-box-shadow: ;
+  --bs-card-inner-border-radius: calc(0.375rem - 1px);
+  --bs-card-cap-padding-y: 0.5rem;
+  --bs-card-cap-padding-x: 1rem;
+  --bs-card-cap-bg: rgba(0, 0, 0, 0.03);
+  --bs-card-cap-color: ;
+  --bs-card-height: ;
+  --bs-card-color: ;
+  --bs-card-bg: #fff;
+  --bs-overlay-padding: 1rem;
+  --bs-card-group-margin: 0.75rem;
+  position: relative;
+  display: inline;
+  flex-direction: column;
+  min-width: 0;
+  height: var(--bs-card-height);
+  word-wrap: break-word;
+  background-color: var(--bs-card-bg);
+  background-clip: border-box;
+  border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+  border-radius: var(--bs-card-border-radius);
+  }
+  .my-3 {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+  }
+  .card-body {
+  flex: 1 1 auto;
+  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+  color: var(--bs-card-color);
+}
+  .review-body{
+  
+    /* border:1px solid #96FC72; */
+    border-top: 1px solid #96FC72;
+}
+  .d-flex {
+  display: flex !important;
+}
+.badge {
+  --bs-badge-padding-x: 0.65em;
+  --bs-badge-padding-y: 0.35em;
+  --bs-badge-font-size: 0.75em;
+  --bs-badge-font-weight: 700;
+  --bs-badge-color: #fff;
+  --bs-badge-border-radius: 0.375rem;
+  display: inline-block;
+  padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+  font-size: var(--bs-badge-font-size);
+  font-weight: var(--bs-badge-font-weight);
+  line-height: 1;
+  color: var(--bs-badge-color);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--bs-badge-border-radius);
+}
+.badge-review{
+    border: 1px solid transparent;
+}
+.card-text:last-child {
+  margin-bottom: 0;
+}
+.review-content{
+    color: #C0DBB6;
+    font-family: 'NanumBarunpen';
+    text-decoration: none;
+}
+.review-content:hover{
+    color: #C0DBB6;
+    font-family: 'NanumBarunpen';
+    text-decoration: none;
+}
+.btn-review2{
+    color:white;
+    background-color:transparent;
+    border-color:white;
+    font-family: 'NanumBarunpen';
+}
+.btn-review2:hover{
+    color:#96FC72;
+    background-color:transparent;
+    border-color:#96FC72;
+    font-family: 'NanumBarunpen';
+}
+.btn-sm + .dropdown-toggle-split, .btn-group-sm > .btn + .dropdown-toggle-split {
+  padding-right: 0.375rem;
+  padding-left: 0.375rem;
+}
+.btn-sm, .btn-group-sm > .btn {
+  --bs-btn-padding-y: 0.25rem;
+  --bs-btn-padding-x: 0.5rem;
+  --bs-btn-font-size: 0.875rem;
+  --bs-btn-border-radius: 0.25rem;
+}
+</style>
+    <div class="bookcover">
+      <div class="bookdot">
+        <div class="page">
+					<!-- 왼쪽 프로필 페이지 구성요소 -->
+          {% include "mypage/profile.html" %}
+
+
+          <div class="content-container">
+            <div class="header content-title">
+              <div class="content-title-name">{{ master.nickname }}님의 마이페이지</div>
+            </div>
+
+            <div class="box content-box">
+              <div class="scroll-box">
+                <div class="d-flex align-items-center" style="font-size: 1.5rem; height: 50px;color:black; font-family: NanumBarunpen; margin-bottom: 10px;">
+                  {{ master.nickname }}님의 리뷰 목록
+                </div>
+                {% for review in reviews %}
+                
+                    <div class="card-body review-body">
+                        <div class="d-flex justify-content-front">
+                            {% if review.modify_date %}
+                            <div class="badge badge-review d-flex align-items-center">
+                                <div class="mr-2" style="font-size: 15px;"><a class="nickname" href="{% url 'mypage:home' nickname=review.writer.nickname %}">@{{ review.writer.nickname }}</a></div>
+                                <div style="color: lightgray;">{{ review.modify_date }} (수정됨)</div>
+                            </div>
+                            {% else %}
+                            <div class="badge badge-review d-flex align-items-center">
+                                <div class="mr-2" style="font-size: 15px;"><a class="nickname" href="{% url 'mypage:home' nickname=review.writer.nickname %}">@{{ review.writer.nickname }}</a></div>
+                                <div style="color: lightgray;">{{ review.create_date }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-text review-content" style="margin-top: 10px; margin-left: 5px; display: flex; justify-content: space-between;">
+                            <div style="width:20%;">
+                                <img style="width:100%;"src="https://storage.googleapis.com/end_moochu/{{review.media_id}}.jpg">
+                                
+                            </div>
+                            <div style="width:80%;">
+                                <div class="card-text review-content" style="margin-left:auto; width: 75%; display: flex; justify-content: space-between;">
+                        
+                                    {% if review.content|length > 70 %}
+                                        <a class="review-content" href="{% url 'review:review_detail' movie_id=review.media_id review_id=review.id %}">
+                                    {% else %}
+                                        <a class="review-content" href="{% url 'review:review_detail' movie_id=review.media_id review_id=review.id %}">{{ review.content|linebreaksbr }}</a>
+                                    {% endif %}
+                            
+                                        {% if request.user == review.writer %}
+                                        <div>
+                                            <a href="#" class="btn btn-sm btn-review2">수정</a>
+                                            <a href="#" class="delete btn btn-sm btn-review2" data-uri="#">삭제</a>
+                                        </div>
+                                        {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="my-3">
+                            <a href="#" class="btn btn-sm">
+                                <img src="{% static 'comment.png' %}" style="max-height: 30px;"> 
+                            </a>
+                            <a href="#" class="btn btn-sm">
+                                <img src="{% static 'thumbs.png' %}" style="max-height: 30px;">
+                            </a>
+                        </div>
+                    </div>
+               
+            {% endfor %}  
+                <br />
+              </div>
+              
+            </div>
+          </div>
+          
+          <!-- 메뉴 버튼 구성 요소-->
+          {% include "mypage/menu.html" %}
+        </div>
+      </div>
+    </div>
+{% endblock %}

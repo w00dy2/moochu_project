@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Movie List{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'media_list.css' %}">
+<style>
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
+</style>
+<div class="container">
+    
+            <div class="ott-logos-box">
+                <div class="ott-logos">
+                    {% for service in ott_service %}
+                    <a href="{% url 'moochu:ott_media_list' ott=service media_type=type %}" class="ott-logo">
+                        <img src="{% static 'images/ott_logo/'|add:'btn_squircle_'|add:service|add:'.png' %}" alt='{{service}}'>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+ 
+        <!-- 사이드바 추가 -->
+        {% include "moochu/movie_genre.html" %}
+
+        <!-- <div class="contents-box"> -->
+                <div class="row">
+                    {% for movie in data %}
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="card mb-4">
+                            <a href="{% url 'moochu:movie_detail' movie_id=movie.id %}">
+                                <div class="aspect-ratio-container">
+                                    <div class="aspect-ratio-content">
+                                        <div class="image-container">
+                                            <img src="https://storage.googleapis.com/end_moochu/{{ movie.id }}.jpg" alt="{{ movie.titleKr }}">
+                                            <div class="overlay"></div>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">{{ movie.titleKr }}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+        <div style="border-bottom:1px solid #96FC72;"></div>
+
+        <div class="pagination">
+            <div style="display: flex; justify-content: center;">
+        
+                {% if data.number > 5 %}
+                    <a href="?page=1{% for genre in selected_genres %}&genres={{ genre }}{% endfor %}" style="margin-right: 30px; font-family: NanumBarunpen;">첫 페이지로</a>
+                {% endif %}
+        
+                {% if data.has_previous %}
+                    <a style="font-family: NanumBarunpen;" href="?page={{ data.previous_page_number }}{% for genre in selected_genres %}&genres={{ genre }}{% endfor %}">이전</a>
+                {% endif %}
+        
+                {% for i in data.paginator.page_range %}
+                    {% if data.number <= 5 and i <= 10 or data.number > data.paginator.num_pages|add:'-5' and i > data.paginator.num_pages|add:'-10' or i > data.number|add:'-5' and i <= data.number|add:'5' %}
+                        {% if i == data.number %}
+                            <span style="font-family: NanumBarunpen;" class="current-page">{{ i }}</span>
+                        {% else %}
+                            <a style="font-family: NanumBarunpen;" href="?page={{ i }}{% for genre in selected_genres %}&genres={{ genre }}{% endfor %}">{{ i }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+        
+                {% if data.has_next %}
+                    <a style="font-family: NanumBarunpen;" href="?page={{ data.next_page_number }}{% for genre in selected_genres %}&genres={{ genre }}{% endfor %}">다음</a>
+                {% endif %}
+            </div>
+        </div>
+        
+</div>
+
+{% endblock %}
+

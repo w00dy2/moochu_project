@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}post{% endblock %}
+{% load static %}
+{% load board_filter %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'board.css' %}">
+
+<div class="container">
+    {% csrf_token %}
+    <h3><a href="{% url 'board:moobo' %}" style="text-decoration-line: underline; text-decoration-style: double; text-underline-offset : 5px;">MooChu Board</a></h3>
+    <ul class="board-menu">
+        <li><a href="{% url 'board:moobo' %}">Board</a></li>
+        <li><a href="{% url 'board:post' %}">Upload</a></li>
+        {% if user.id %}
+            <li><a href="{% url 'board:my_posts' user.id %}">My Posts</a></li>
+        {% endif %}
+    </ul>
+
+
+    <h2 class="border-bottom py-2"></h2>
+
+    <h4 class="post-title">{{ post.title }}</h4> <!-- 게시판 글 제목 -->
+
+    <div class="info">
+        <dl>
+            <dt>작성자</dt>
+            <dd>{{post.writer}}</dd>
+        </dl>
+        <dl>
+            <dt>작성일</dt>
+            <dd>{{post.create_date}}</dd>
+        </dl>
+        <dl>
+            <dt>조회</dt>
+            <dd>{{post.n_hit}}</dd>
+        </dl>
+    </div>
+
+    <!-- 게시판 글 내용 -->
+    <div class="content">
+        {{ post.content|linebreaksbr }}      <!-- linebreaksbr: enter인식해서 보여줌 -->
+    </div>
+
+    <div class="row my-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="vote"> <!-- 추천 영역 -->
+                <a href="#" data-uri="{% url 'board:vote_post' post.id %}" style="text-decoration: none;"
+                    class="recommend" data-voted="{{ voted|lower }}" data-is-writer="{{ is_writer|lower }}">
+                    <i class="fa-solid fa-thumbs-up fa-l" style="color: #FCA472;"></i>                
+                </a>
+                  {{ post.voter.count }}
+            </div>
+    
+            {% if request.user == post.writer %}
+            <div class="my-3">
+                <a href="{% url 'board:post_edit' post.id %}" class="btn btn-board btn-sm">수정</a>
+                <a href="#" class="delete btn btn-board btn-sm" data-uri="{% url 'board:post_delete' post.id %}">삭제</a>
+            </div>
+            {% endif %}    
+        </div>
+    </div>
+    
+
+
+    <h9 class="comment-count">{{ post.comments.count|default_if_none:"0" }}개의 댓글이 있습니다.</h9> <!-- 게시판 글에 달린 댓글 갯수 -->
+
+    {% if post.comments.count > 0 %}
+        <div class="mt-3">
+            {% for comment in post.comments.all %}
+            <div class="card my-3" style="border: 1px solid transparent; background-color: transparent;">
+                <div class="card-body comment-body">
+                    <div class="d-flex justify-content-front">
+                        {% if comment.modify_date %}
+                        <div class="badge badge-comment d-flex align-items-center">
+                            <div class="mr-2" style="font-size: 15px;"><a class="nickname" href="{% url 'mypage:home' nickname=comment.writer.nickname %}">@{{ comment.writer.nickname }}</a></div>
+                            <div style="color: lightgray;">{{ comment.modify_date }} (수정됨)</div>
+                        </div>
+                        {% else %}
+                        
+                        <div class="badge badge-comment d-flex align-items-center">
+                            <div class="mr-2" style="font-size: 15px;"><a class="nickname" href="{% url 'mypage:home' nickname=comment.writer.nickname %}">@{{ comment.writer.nickname }}</a></div>
+                            <div style="color: lightgray;">{{ comment.create_date }}</div>
+                        </div>
+                        
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="card-text comment-content" style="white-space: pre-line; margin-top: 10px; margin-left: 5px;">{{ comment.content }}</div>
+                        {% if request.user == comment.writer %}
+                        <div class="my-3">
+                            <a href="{% url 'board:comment_edit' comment.id  %}" class="btn btn-sm btn-board1">수정</a>
+                            <a href="#" class="delete btn btn-sm btn-board1" data-uri="{% url 'board:comment_delete' comment.id  %}">삭제</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+    {% endif %}
+
+
+    <form action="{% url 'board:comment_create' post.id %}" method="post" style="margin-top: 10px;">
+    {% csrf_token %}
+    <textarea class="comment_text" name="content" id="content" rows="2" required></textarea>
+    <input class="btn btn-moobo" type="submit" value="댓글 작성" style="font-family: 'NanumBarunpen'; margin-bottom: 100px;">
+    </form>
+</div>
+
+
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $(".delete").on('click', function() {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                location.href = $(this).data('uri');
+            }
+        });
+        
+        $(".recommend").on('click', function() {
+            var errorMessage = "";
+            if (confirm("정말로 추천하시겠습니까?")) {
+                if ($(this).data('voted')) {
+                    errorMessage = "이미 추천했습니다.";
+                } else if ($(this).data('is-writer')) {
+                    errorMessage = "본인 글에는 추천할 수 없습니다.";
+                } else {
+                    location.href = $(this).data('uri');
+                }
+            }
+            
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+        });
+    });
+</script>
+    
+    
+{% endblock %}

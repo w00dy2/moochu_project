@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}search{% endblock %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'search.css' %}">
+
+
+<div class="container">
+  <form action="{% url 'search:search' %}" method="GET">
+    <div class="input-group">
+      <input type="text" class="form-control grayed-input" id="search" name="search" placeholder="검색어를 입력하세요">
+        <button class="btn btn-search" type="submit">검색</button>
+    </div>
+  </form>
+  <!-- 실시간 급상승 검색어 순위 -->
+  <div class="row justify-content-center">
+    <!-- 1위부터 5위까지 표시 -->
+    <div class="col-md-3 mb-3 d-flex justify-content-start">
+      <ul class="ranking-list">
+        {% for search in top5 %}
+        <li class="ranking-item">
+          <span class="badge">{{ forloop.counter }}</span><a href="http://34.64.147.118:8000/search/?search={{search}}" style="text-decoration: none; color:#96FC72;">{{search}}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <!-- 6위부터 10위까지 표시 -->
+    <div class="col-md-3 mb-3 d-flex justify-content-start">
+      <ul class="ranking-list">
+        {% for search in top10 %}
+        <li class="ranking-item">
+          <span class="badge"> {{ forloop.counter|add:5 }}</span><a href="http://34.64.147.118:8000/search/?search={{search}}"style="text-decoration: none; color:#96FC72;">{{search}}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="search-media">
+    {% for media in data %}
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="search-card mb-4">
+        <a href="{% url 'moochu:movie_detail' movie_id=media.id %}">
+          <div class="aspect-ratio-container">
+            <div class="aspect-ratio-content">
+              <div class="image-container">
+                <img src="https://storage.googleapis.com/end_moochu/{{media.id}}.jpg" alt="영화 포스터" title="{{ media.title }}">
+                <div class="overlay"></div>
+              </div>
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ media.title }}</h5>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>  
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

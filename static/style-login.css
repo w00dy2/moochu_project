@@ -1,0 +1,131 @@
+
+/* 아이디, 비밀번호 입력창 크기 */
+.form-control{
+  width: 400px;
+  flex-shrink: 0;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-family: 'NanumBarunpen';
+  height:3rem
+}
+
+/* 로그인 버튼 */
+.login-btn{
+  width: 200px;
+  height: 50px;
+  flex-shrink: 0;
+  margin-bottom: 15px;
+  background: #96FC72;
+  border-radius: 0.3rem;
+  border-color: transparent;
+  font-size: 1.5rem;
+  font-family: NanumBarunpen;
+}
+/* 로그인 버튼 글씨 폰트 */
+.login-font{
+  display: flex;
+  color: #96FC72;
+  font-size: 25px;
+  width: 400px;
+  height: 40px;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* 로그인 관련한 전체 정보에 대한 박스 */
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:auto;
+  margin-top: 30px;
+}
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 아이디, 비밀번호 글씨 폰트 */
+label{
+  font-family: NanumBarunpen;
+  color: #96FC72;
+}
+
+/* 아직 회원가입 아니십니까~ 에 대한 css */
+.a-1 {
+    justify-content: end;
+    color: #96FC72;
+    font-size: 15px;
+    font-family: NanumBarunpen;
+<<<<<<< HEAD
+    text-decoration: none;
+}
+/* 아직 회원가입 아니십니까~ 에 마우스 가져다 댔을 때 css */
+.a-1:hover {
+  justify-content: end;
+  color: #96FC72;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: NanumBarunpen;
+  text-decoration: none;
+}  
+
+
+
+
+
+.checkbox-custom {
+  display: inline-block;
+  position: relative;
+  padding-left: 35px; /* 체크박스 왼쪽 여백 */
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  user-select: none;
+}
+
+.checkbox-custom input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee; /* 체크박스 배경 색상 */
+  border-radius: 4px;
+}
+
+.checkbox-custom input:checked ~ .checkmark {
+  background-color: #96FC72; /* 체크된 상태일 때의 배경 색상 */
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-custom input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-custom .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}

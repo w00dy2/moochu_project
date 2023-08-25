@@ -1,0 +1,38 @@
+
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}
+<div class="bookcover">
+<div class="bookdot">
+  <div class="page">
+                              <!-- 왼쪽 프로필 페이지 구성요소 -->
+    {% include "mypage/profile.html" %}
+    <div class="content-container">
+                              <!-- 오른쪽 페이지 상단 글씨  -->
+      <div class="header content-title">
+        <div class="content-title-name"> <span style="color: #FF8540;">{{ master.nickname }}</span> 님의 마이페이지</div>
+      </div>
+      <div class="box content-box">
+        <div class="scroll-box">
+          <div class="box-title"><span style="font-size: 20px; color: #FF8540;">{{ master.nickname }}</span> 님의 찜 리스트</div>
+          
+            <!-- 찜 목록 리스트 표시 -->
+            <div class="poster-container">
+              {% if mylist %}
+              {% for media in mylist %}    
+              <a href="{% url 'moochu:movie_detail' movie_id=media.media_id %}"><img class="poster-img" src="https://storage.googleapis.com/end_moochu/{{media.media_id}}.jpg" ></a>
+              {% endfor %}
+              {% else %}
+              <h3 class="no-note"><span style="font-weight: 900;">{{ master.nickname }}</span> 님의 찜 목록이 존재하지 않습니다.</h3>
+              {% endif %}
+            </div> 
+        </div>
+      </div>
+    </div>
+    <!-- 메뉴 버튼 구성 요소-->
+    {% include "mypage/menu.html" %}
+  </div>
+</div>
+</div>
+{% endblock %}

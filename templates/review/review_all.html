@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}리뷰 목록{% endblock %}
+{% load review_movie %}
+{% load hanja_filter %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'media_detail.css' %}">
+<link rel="stylesheet" href="{% static 'review.css' %}">
+<style>
+    @import 
+    url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+</style>
+<div class="container">
+    <div class="d-flex align-items-center" style="font-size: 1.5rem; height: 50px;color:white; font-family: NanumBarunpen; margin-bottom: 10px;">
+        {% if review_all %}
+            최신 리뷰 목록
+        {% else %}
+            <span class="movie-review">
+                {% if movie_title|is_hanja %}
+                    {{ movie_title|hanja_style|safe }}
+                {% else %}
+                    {{ movie_title|safe }}
+                {% endif %}
+            </span>&nbsp;의 모든 리뷰
+        {% endif %}
+
+    </div>
+    {% if reviews %} 
+    {% for item in reviews %}
+        <div class="card my-3" style="border: 1px solid transparent; background-color: transparent;">
+            <div class="card-body review-body d-flex justify-content-between">
+                <div style="width:15%; text-align: center;">
+                    <a href="{% url 'moochu:movie_detail' movie_id=item.movie.id %}" style="text-decoration: none;">
+                        {% if item.review.media_id %}
+                            {% with poster_url="https://storage.googleapis.com/end_moochu/"|add:item.movie.id|add:".jpg" %}
+                                {% if poster_url|url_exists %}
+                                    <img src="{{ poster_url }}" style="height: 200px; margin: auto;" alt="{{ movie.titleKr }}">
+                                {% else %}
+                                    <img src="{% static 'images/poster.png' %}" style="height: 200px; margin-left: auto;" alt="기본 사진">
+                                {% endif %}
+                            {% endwith %}
+                        {% endif %}
+                        
+                        <div style="color:#96FC72;">
+                            {% if item.movie.title|is_hanja %}
+                                {{ item.movie.title|hanja_style|safe }}
+                            {% else %}
+                                {{ item.movie.title|truncatechars:15|safe }}
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+                <div style="width: 85%;">
+                    {% if item.review.modify_date %}
+                        <div class="badge badge-review d-flex align-items-center">
+                            <div class="mr-2" style="font-size: 15px;"><a class="nickname" href="{% url 'mypage:home' nickname=item.review.writer.nickname %}">@{{ item.review.writer.nickname }}</a></div>
+                            <div style="color: lightgray;">{{ item.review.modify_date }} (수정됨)</div>
+                        </div>
+                    {% else %}
+                        <div class="badge badge-review d-flex align-items-center">
+                            <div class="mr-2" style="font-size: 15px;"><a class="nickname" href="{% url 'mypage:home' nickname=item.review.writer.nickname %}">@{{ item.review.writer.nickname }}</a></div>
+                            <div style="color: lightgray;">{{ item.review.create_date }}</div>
+                        </div>
+                    {% endif %}
+                    <div class="card-text review-content" style="margin-top: 10px; margin-left: 5px;">
+                        <a class="review-content" href="{% url 'review:review_detail' movie_id=item.review.media_id review_id=item.review.id %}">{{ item.review.content|linebreaksbr|text_cut|safe }}</a>
+                    </div>
+                    {% if request.user == item.eview.writer %}
+                        <div class="d-flex justify-content-end"> <!-- 수정, 삭제 버튼 오른쪽 정렬 -->
+                            <a href="{% url 'review:review_edit' review.media_id review.id %}" class="btn btn-sm btn-review1">수정</a>
+                            <a href="#" class="delete btn btn-sm btn-review1" data-uri="{% url 'review:review_delete' item.review.id %}">삭제</a>
+                        </div>
+                    {% endif %}
+                    <div class="my-3">
+                        <a href="{% url 'review:review_detail' item.review.media_id item.review.id %}" class="btn btn-sm">
+                            <span class="icon-comments" style="color: #96fc72; font-size: 20px;"></span>
+                            <span style="font-family: Chonburi; font-size: 17px; color:white;margin-left: 5px;">{{item.review.review_comments.count}}</span>
+                        </a>
+
+                            <a href="#" data-uri="{% url 'review:vote_review' item.review.id %}" style="text-decoration: none;"
+                                class="recommend btn btn-sm" data-voted="{{ voted|lower }}" data-is-writer="{{ is_writer|lower }}">
+                                <span class="icon-thumbs-up" style="color: #96fc72; font-size: 20px;"></span>
+                                <span style="font-family: Chonburi; font-size: 17px; color: white;margin-left: 5px;">{{ item.review.voter.count }}</span>
+                            </a>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="card my-3" style="border: 1px solid transparent; background-color: transparent;">
+        <div class="card-body review-body">
+            <div class="d-flex justify-content-front">
+                <h6 style="color:white; font-family: NanumBarunpen;">아직 작성된 리뷰가 없습니다.</h6>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</div>
+
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $(".delete").on('click', function() {
+            if (confirm("리뷰를 정말로 삭제하시겠습니까?")) {
+                location.href = $(this).data('uri');
+            }
+        });
+        
+        $(".recommend").on('click', function() {
+            var errorMessage = "";
+            if (confirm("정말로 추천하시겠습니까?")) {
+                if ($(this).data('voted')) {
+                    errorMessage = "이미 추천했습니다.";
+                } else if ($(this).data('is-writer')) {
+                    errorMessage = "본인 글에는 추천할 수 없습니다.";
+                } else {
+                    location.href = $(this).data('uri');
+                }
+            }
+            
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+        });
+    });
+</script>
+    
+    
+{% endblock %}

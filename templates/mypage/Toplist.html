@@ -1,0 +1,101 @@
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}  
+  <style>
+    .poster-img {
+      cursor: pointer;
+    }
+    .selected {
+      border: 3px solid  #96FC72;
+    }
+</style>
+
+
+{% block scripts %}
+<script>
+function toggleSelection(event, media_id) {
+    const checkbox = document.getElementById(`checkbox-${media_id}`);
+    const img = event.target;
+    checkbox.checked = !checkbox.checked;
+
+    if (checkbox.checked) {
+        img.classList.add('selected');
+    } else {
+        img.classList.remove('selected');
+    }
+}
+</script>
+{% endblock %}
+
+<div class="bookcover">
+    <div class="bookdot">
+        <div class="page">
+
+              <!-- 왼쪽 프로필 페이지 구성요소 -->
+            {% include "mypage/profile.html" %}
+
+            <div class="content-container">
+                <!-- 오른쪽 페이지 상단 글씨  -->
+                <div class="header content-title">
+                    <div class="content-title-name"> <span style="color: #FF8540;">{{ user.nickname }}</span> 님의 마이페이지</div>
+                </div>
+                <!-- 오른쪽 페이지 구성 -->
+                <div class="box content-box">
+                    <div class="scroll-box">
+
+
+                        <div class="box-title">현재 {{user.nickname }}님의 인생 명작 TOP 5 </div>
+                        {% if toplist %}
+                        <div class="poster-container">
+                            <form method="POST" action="{% url 'mypage:delete' nickname=master.nickname %}">
+                              {% csrf_token %}
+                              <button type="submit" class="btn-mypage">삭제하기</button><br /><br />
+                              {% for media in toplist %}
+                                
+                                <input type="checkbox" id="checkbox-{{ media.media_id }}" name="media_id" value="{{ media.media_id }}" style="display:none;">
+                                <img class="poster-img" src="https://storage.googleapis.com/end_moochu/{{media.media_id}}.jpg" onclick="toggleSelection(event, '{{ media.media_id }}')">
+                                
+                              {% endfor %}
+                            </form>
+                        </div>
+                        {% else %}
+                        <h3 class="no-note"><span style="font-weight: 900;">{{ master.nickname }}</span> 님의 인생작 목록이 존재하지 않습니다.</h3>
+                        {% endif %}
+
+
+                        <div class="box-title">인생 명작 TOP 5 선정하기</div>
+                        {% if reviews %}
+                        <div class="poster-container">
+                            <form method="POST" action="{% url 'mypage:Toplist' nickname=master.nickname %}">
+                              {% csrf_token %}
+                              <button type="submit" class="btn-mypage">선정하기</button><br /><br />
+                              {% for media in reviews %}
+                                
+                                <input type="checkbox" id="checkbox-{{ media }}" name="media_id" value="{{ media }}" style="display:none;">
+                                <img class="poster-img" src="https://storage.googleapis.com/end_moochu/{{media}}.jpg" onclick="toggleSelection(event, '{{ media }}')">
+                                
+                              {% endfor %}
+                            </form>
+                        </div>
+                        {% else %}
+                            <h3 class="no-note"><span style="font-weight: 900;">{{ master.nickname }}</span>님의 리뷰 항목이 남아있지 않습니다.</h3>
+                        {% endif %}
+                        
+                       
+                             
+                                
+                                
+                    </div> <!-- scroll-box -->
+                </div> <!-- box -->
+                
+            </div> <!-- content -->
+
+            <!-- 메뉴 버튼 구성 요소-->
+            {% include "mypage/menu.html" %}
+          
+        </div> <!-- page -->
+    </div>  <!-- bookdot -->
+</div> <!-- bookcover --> 
+{% endblock %}
+

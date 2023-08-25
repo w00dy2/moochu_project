@@ -1,0 +1,78 @@
+{% load static %}
+<!-- 왼쪽 프로필 페이지 구성요소 -->
+<div class="profile-container">
+  <div class="header profile-title">
+    TODAY <span class="color-red">  28</span> | TOTAL 234918
+  </div>
+                  <!-- 프로필 사진 -->
+  <div class="box profile-box">
+    <div class="profile-image">
+      <img class="profile-image-img" src="{{ master.profile_img.url }}" alt="프로필 이미지"/>
+    </div>
+            <!-- 프로필 사진 밑에 내용 -->
+    <div class="profile-text">
+      <text style="width: 100%; text-overflow: clip; font-size:25px;">{{ master.nickname }} </text>
+    </div> 
+    <div class="bio-area">
+      <div class="bio"> 한줄 소개 </div>
+      <text class="bio-content">{{ master.comment|linebreaksbr|safe }}</text><br />
+    </div>
+    <div> 
+      <div class="temp">온도:<span style="color: #95B988; font-size: 20px;"> {{ master.temp|floatformat:1 }}</span>°C</div>
+      <div class="thermometer">
+        <div class="temperature-bar">
+          <div class="temperature-fill" style="width: {{ master.temp }}%"></div>
+        </div>
+      </div>
+      <br>
+        <div class="bio">팔로워 :<span style="color: #FF8540; font-size: 20px;"> {{ follower_count }} </span>명</div>
+        <div class="bio">팔로잉 :<span style="color: #FF8540; font-size: 20px;"> {{ following_count }} </span>명</div>
+    </div>
+
+                <!-- 소개글 밑에 나오는 구성 -->
+      <br />   
+      {% if writer.id != master.id %}
+      {% if allow %}     
+        <form id="follow-form" action="{% url 'mypage:follow' nickname=master.nickname %}" method="POST">
+          {% csrf_token %}
+          <button class="prof-follow-btn" type="submit">팔로우 취소
+            <i class="fa-solid fa-user-minus" style="color: #2c2e34; margin-bottom: 3px;"></i>
+          </button>
+        </form>
+      {% else %}     
+        <form action="{% url 'mypage:follow' nickname=master.nickname %}" method="post">
+          {% csrf_token %}
+          <button class="prof-follow-btn" type="submit">팔로우  
+            <i class="fa-solid fa-user-plus" style="color: #2c2e34; margin-bottom: 3px;"></i>
+          </button>
+        </form>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#follow-form').submit(function(e) {
+      e.preventDefault(); // 기본 form 제출 동작 방지
+      
+      var form = $(this);
+      var url = form.attr('action');
+      
+      $.ajax({
+        url: url,
+        type: 'DELETE',
+        data: form.serialize(),
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        },
+        success: function(response) {
+          location.reload();
+        },
+        error: function(xhr, status, error) {
+          console.error('팔로우 취소에 실패했습니다:', error);
+        }
+      });
+    });
+  });
+</script>

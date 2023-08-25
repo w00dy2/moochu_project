@@ -1,0 +1,41 @@
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="bookcover">
+      <div class="bookdot">
+        <div class="page">
+					<!-- 왼쪽 프로필 페이지 구성요소 -->
+          {% include "mypage/profile.html" %}
+
+
+          <div class="content-container">
+            <div class="header content-title">
+              <div class="content-title-name">{{ master.nickname }}님의 마이페이지</div>
+            </div>
+
+            <div class="box content-box">
+              <div class="scroll-box">
+                <div class="box-title">{{ master.nickname }}님이 남긴 평점</div>
+                <div class="card-container-vote">
+
+                  {% for vote in votes %}
+                  <div class="card">
+                    <a href="{% url 'moochu:movie_detail' movie_id=vote.media_id %}"><img class="card-img" src='https://storage.googleapis.com/moochu/{{vote.media_id}}.jpg' alt="영화 포스터"></a>
+                    <span class="card-text"><a style="color: #96FC72"> ★ </a>{{vote.rating}}</span>
+                  </div>
+                  {% endfor %}
+
+                            
+                </div>             
+              </div>
+              
+            </div>
+          </div>
+          
+          <!-- 메뉴 버튼 구성 요소-->
+          {% include "mypage/menu.html" %}
+        </div>
+      </div>
+    </div>
+{% endblock %}

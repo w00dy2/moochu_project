@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Movie Select{% endblock %}
+{% load static %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static 'style-genre.css'%}">
+</head>
+
+
+<h1 class="movie_list">Movie List</h1>
+<ul>
+    <form method="post" action="{% url 'common:movie_selection' %}">
+        {% for movie in movies %}
+            <li class="movie">
+                <div>
+                    <img src="https://storage.googleapis.com/end_moochu/{{ movie.m_id }}.jpg" class="poster">
+                </div>
+                <div> 
+                    <div style="display: flex; flex-direction: column;">
+                        <!-- 영화 정보를 포함하는 div 태그 -->
+                        <div>
+                            {{ movie.title_kr }} <br>
+                        </div>
+                        <!-- 별점 div -->
+                        
+                        {% csrf_token %}
+                        <input type="hidden" name="movie_title_{{ movie.m_id }}" value="{{ movie.title }}">
+                        <div class="rate">
+                            {% with forloop.counter as movie_id %}  {# 고유한 영화 ID 생성 #}
+                            <input type="radio" id="rating10_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="10"><label for="rating10_{{ movie.m_id }}" title="5점"></label>
+                            <input type="radio" id="rating9_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="9"><label class="half" for="rating9_{{ movie.m_id }}" title="4.5점"></label>
+                            <input type="radio" id="rating8_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="8"><label for="rating8_{{ movie.m_id }}" title="4점"></label>
+                            <input type="radio" id="rating7_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="7"><label class="half" for="rating7_{{ movie.m_id }}" title="3.5점"></label>
+                            <input type="radio" id="rating6_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="6"><label for="rating6_{{ movie.m_id }}" title="3점"></label>
+                            <input type="radio" id="rating5_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="5"><label class="half" for="rating5_{{ movie.m_id }}" title="2.5점"></label>
+                            <input type="radio" id="rating4_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="4"><label for="rating4_{{ movie.m_id }}" title="2점"></label>
+                            <input type="radio" id="rating3_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="3"><label class="half" for="rating3_{{ movie.m_id }}" title="1.5점"></label>
+                            <input type="radio" id="rating2_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="2"><label for="rating2_{{ movie.m_id }}" title="1점"></label>
+                            <input type="radio" id="rating1_{{ movie.m_id }}" name="rating_{{ movie.m_id }}" value="1"><label class="half" for="rating1_{{ movie.m_id }}" title="0.5점"></label>
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        <input type="submit" value="Save Rating">
+    </form>
+</ul>
+{% endblock %}
+

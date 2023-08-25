@@ -1,0 +1,614 @@
+.news-flex-box {
+  flex: 0 0 auto;
+  margin-bottom: 2rem;
+  display: flex;
+  font-size: 0.8rem;
+}
+.news-row {
+  display: flex;
+  font-size: 1.5rem;
+  border-bottom: 1px dashed grey;
+  margin: 3px 0;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-family: NanumBarunpen;
+}
+.nickname{
+  color:#FF8540;
+}
+.news-box { /* 팔로워 목록 관련 박스*/
+  flex: 1;
+  padding: 10px;
+}
+
+.follower-text {
+  text-align: center;
+}
+
+/* news-flex-box -> box-right-flex */
+.box-right {
+  flex: 0 0 auto;
+  margin-bottom: 2rem;
+  display: flex;
+  font-size: 1.3rem;
+}
+
+/* news-box -> box-right */
+.box-right {
+  flex: 1;
+}
+
+.update-box { /* 팔로잉 목록 관련 박스 */
+  flex: 1;
+  padding: 10px;
+}
+.menu-row {
+  display: flex;
+  font-size: 1.5rem;
+  border-bottom: 1px dashed grey;
+  margin: 3px 0;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-family: NanumBarunpen;
+}
+.nickname{
+  color:#FF8540;
+  text-decoration: none;
+}
+.nickname:hover{
+  color:#95B988;
+  text-decoration: none;
+}
+.box-title { /* 방명록 '~에게', '~님의 방명록' */
+  font-family: "NanumBarunpen";
+  font-weight: 1000;
+  font-size: 20px;
+  border-bottom: 1px solid grey;
+  margin-bottom: 15px;
+}
+
+/* news-row -> box-row */
+.box-row {
+  display: flex;
+  font-size: 1.3rem;
+  margin: 3px 0;
+}
+
+.news-category {
+  padding: 0 6px;
+  margin-right: 6px;
+  color: white;
+  border-radius: 3px;
+}
+
+.category-pic {
+  background-color: #f15f5f;
+}
+
+.category-post {
+  background-color: #617dc1;
+}
+
+.menu-item {
+  flex: 1;
+}
+
+.menu-num {
+  font-family: "NeoDunggeunmo";
+  padding-left: 6px;
+  color: #003399;
+}
+
+.miniroom-gif-box {
+  background-color: mediumturquoise;
+  border: 1px solid #808080;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.miniroom-gif-box > img {
+  width: 70%;
+}
+
+
+body {
+  background-color: #2C2E34;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 25px;
+  /** 기본 폰트 설정 */
+  font-family: "NanumBarunpen", 'Chonburi';
+}
+
+.bookcover {
+  background-color: #C0DBB6;
+  border-radius: 9px;
+  /* border: 1px solid #738186; */
+  width: 1400px;
+  height: 900px;
+  margin: 10px auto;
+  margin-bottom: 100px !important;
+  position: relative;
+  padding-bottom: 100px;
+}
+
+.bookdot {
+  border-radius: 9px;
+  border: 2px dashed #2C2E34;
+  padding: 15px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+}
+
+.page {
+  background-color: #F6FFEF;
+  border-radius: 9px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  padding: 15px;
+}
+.profile-title {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-container {
+  flex: 0.4;
+  margin-right: 1.5rem;
+  max-width: 352px;
+  max-height: 825px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.menu-container {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.menu-container > a {
+  padding: 6px;
+  margin: 15px 0;
+  background-color: #C0DBB6;
+  border-bottom-right-radius: 6px; /* 우측 하단 border-radius 적용 */
+  border-top-right-radius: 6px; /* 우측 상단 border-radius 적용 */
+  border: 1px solid transparent;
+  color: #F6FFEF;
+  text-decoration: none;
+  font-family: "NanumBarunpen";
+  font-size: 1000;
+  font-size: 20px;
+  text-align: center;
+}
+
+.menu-container > a:hover {
+  background-color: #98DB80;
+  color: #F6FFEF;
+}
+
+
+.header {
+  flex: 0.1;
+}
+
+.box {
+  background-color: white;
+  flex: 3;
+  border-radius: 10px;
+  border: 1px solid #cdcdcd;
+}
+
+.color-red {
+  color: red;
+}
+
+.profile-box {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.profile-image {
+  flex: none;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-image-img {
+  height:300px; 
+  width:250px;
+  display: inline-block;
+  margin: auto;
+}
+
+.profile-text {
+  font-size: 2rem;
+  line-height: 1.7;
+  font-family: NanumBarunpen;
+  color:#FF8540;
+  margin: 43px 24px 43px 24px;
+  white-space: nowrap; /* 줄 바꿈 방지 */
+}
+
+.profile-username {
+  flex: 0;
+}
+.mypage-edit{
+  font-family: NanumBarunpen;
+  font-weight: bolder; 
+  margin-top: 30px;
+  color:#95B988;
+}
+.input-group2 {
+  width: 100%;
+  margin: auto;
+  font-family: NanumBarunpen;
+  border: 1px solid #C0DBB6;
+  border-radius: 0.3rem;
+}
+::file-selector-button {
+  -webkit-appearance: button;
+  color: #2C2E34;
+  background-color: #FCA472;
+  border: 1px solid transparent;
+  border-radius: 0.375rem;
+  box-shadow: none;
+
+}
+.content-box {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  position: relative;
+}
+.content-title {
+  display: flex;
+  align-items: center;
+}
+.content-title-name {
+  flex: 1;
+  font-family: 'NanumBarunpen';
+}
+.poster-img {
+  width: 130px;
+  height: 193px;
+  object-fit: cover;
+  margin-right: 15px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+.poster-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 10px;
+  flex-direction: row;
+}
+.scroll-box {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  overflow: auto;
+}
+
+.card {
+  flex-direction: column;
+  align-items: center;
+  width: 150px;
+  padding: 10px;
+  /* border: 1px solid #ccc; */
+  border-radius: 5px;
+  margin-top: 15px;
+  display: inline-block;
+  margin-right:27px;
+}
+
+.card-img {
+  width: 150px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.card-text {
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-size: 15px;
+}
+.prof-follow-btn {
+  width: 100%;
+  background-color: #96FC72;
+  border:1px solid transparent;
+  border-radius: 0.374rem;
+  font-family: NanumBarunpen;
+}
+
+.follow-btn {
+  background-color: #FFD7C0;
+  border:1px solid transparent;
+  border-radius: 0.375rem;
+  font-family: NanumBarunpen;
+  margin: 0 3px 6px 6px;
+}
+.follow-img{
+  width: 40px;
+  height: 40px;
+}
+.follow-title {
+  font-family: "NanumBarunpen";
+  font-weight: 1000;
+  font-size: 20px;
+  border-bottom: 1px solid grey;
+}
+.no-follow{
+  font-family: NanumBarunpen;
+  color:#FCA472;
+  text-align: left;
+  font-size: 25px;
+  margin-top: 20px;
+}
+.thermometer {
+  width: 100%;
+  height: 20px;
+  background-color: #eee;
+  border-radius: 10px;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.temperature-bar {
+  width: 100%;
+  height: 100%;
+  background-color: #ddd;
+}
+
+.temperature-fill {
+  height: 100%;
+  background-color: #98DB80;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.bio{
+  font-weight: bolder;
+  font-family: 'NanumBarunpen';
+}
+.temp{
+  font-weight: bolder;
+  font-family: 'NanumBarunpen';
+  margin-bottom: 10px;
+}
+.bio-content{
+  font-family: NanumBarunpen;
+}
+.bio-area{
+  flex: 1;
+}
+
+
+
+
+
+
+
+
+/* 방명록에 해당하는 css */
+.delete-button {
+  background-color: #FCA472;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+
+}
+.delete-button:hover {
+  background-color: #FFE7D9;
+  color: #FCA472;
+}
+
+
+.content-note{
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid rgb(206, 206, 206);
+  width: 100%;
+  flex: 1;
+  padding: 12px ;
+  margin-top:15px;
+  margin-bottom: 15px;
+}
+.main-section{
+  overflow-y: auto;
+}
+.guest-note{
+  margin-bottom: 1rem;
+}
+.guest-info{
+  height: 2rem;
+  background-color: #EBEBEB;
+  padding-left: 1rem;
+  display: flex;
+  align-items: center;
+  font-family: 'NanumBarunpen';
+}
+.span-note{
+  color: #FF8540;
+  font-weight: bold;
+  font-family: 'NanumBarunpen';
+  text-decoration: none !important;
+}
+.span-note:hover{
+  color:#FF8540;
+}
+
+.no-note{
+  font-family: NanumBarunpen;
+  color:#FF8540;
+  text-align: center;
+}
+.guest-profile{
+  border: 1px solid rgb(204, 204, 204);
+  height: 200px;
+  width: 200px;
+  margin-right: 1.25rem;
+  margin-top: 10px;
+  background-size: contain;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.guest-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.btn-moobo {
+  color: #2C2E34;
+  background-color: #FCA472;
+  border: 1px solid transparent;
+  font-family: 'NanumBarunpen';
+  border-radius: 0.375rem;
+  box-shadow: none;
+}
+
+.btn-moobo:hover {
+  color: #2C2E34;
+  background-color: white;
+  font-family: 'NanumBarunpen';
+  border: 1px solid #FCA472;
+}
+
+.form-container {
+  display: flex;
+  align-items: flex-end; /* textarea와 버튼을 아래로 정렬 */
+}
+
+.write-guestnote-form {
+  height: 200px; /* 이미지 높이와 동일하게 설정 */
+}
+
+.guest-content {
+  display: flex;
+  align-items: center;
+  flex-direction: row; /* 가로 방향으로 배치 */
+  height: 100%; /* 부모 요소의 높이를 모두 차지하도록 설정 */
+}
+
+textarea {
+  flex: 1; /* 작성칸이 남은 공간을 모두 차지하도록 설정 */
+  margin-top: 25px;
+  height: 180px; /* 부모 요소의 높이를 모두 차지하도록 설정 */
+  resize: none; /* 작성칸 크기 조절 비활성화 */
+  width: 500px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+
+
+
+/* 리뷰 & 평점 페이지 css */
+.card-container-vote {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.card-container-vote .card:nth-child(n+9) {
+  display: none;
+}
+
+.more-button {
+  display: none;
+  text-align: center;
+  margin-top: 10px;
+}
+.review-text {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-size: 15px;
+}
+.review-container {
+  max-height: 280px; /* 숨길 리뷰 영역의 최대 높이 설정 */
+  overflow: hidden;
+  position: relative;
+}
+
+
+.toggle-reviews {
+  cursor: pointer;
+  position: absolute;
+  margin-left: 65%;
+  padding: 5px;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#toggle-reviews:hover {
+  background-color: #ddd;
+}
+
+.card-container-vote {
+  overflow: hidden;
+  position: relative;
+}
+
+.card-container-vote.hide-votes {
+  max-height: none; /* 전체보기를 클릭할 경우, 모든 평점이 보이도록 높이 설정 */
+}
+
+#view-all-votes {
+  cursor: pointer;
+  position: absolute;
+  margin-left: 65%;  
+  padding: 5px;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#view-all-votes:hover {
+  background-color: #ddd;
+}

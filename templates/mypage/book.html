@@ -1,0 +1,132 @@
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="bookcover">
+      <div class="bookdot">
+        <div class="page">
+           <!-- 왼쪽 프로필 페이지 구성요소 -->
+           {% include "mypage/profile.html" %}
+
+
+
+
+          <div class="content-container">
+            <div class="header content-title">
+              <div class="content-title-name"><span style="color: #FF8540;">{{ master.nickname }}</span> 님의 마이페이지</div>
+            </div>
+            
+              <!-- 오른쪽 페이지 구성 -->
+            <div class="box content-box"> 
+              <div class="scroll-box">
+                <div class="box-title"><span style="font-size: 20px; color: #FF8540;">{{ master.nickname }}</span> 에게</div>
+                <div class="content-note main-section">
+                  <div class="guest-note">
+                    <div class="guest-info">작성칸&nbsp;
+                    </div>
+                    <div class="write-guestnote-form">
+                      <div class="guest-content">
+                        <div class="guest-profile">
+                            <img class="guest-image" src="{{ writer.profile_img.url }}" alt="방명록 프로필">
+                        </div>
+
+                        <div class="form-container">
+                          <form method="POST" action="{% url 'mypage:book' nickname=master.nickname %}" style="resize: none;">
+                              {% csrf_token %}
+                              <textarea class="align-items-center" name="content" required></textarea>
+                              <input type="submit" class="btn-moobo" value="작성 완료">
+                          </form>
+                        </div>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+                <div class="box-title" style="margin-top: 15px;"><span style="font-size: 20px;color: #FF8540;">{{ master.nickname }}</span> 님의 방명록</div>
+                {% if book %}
+                {% for book in book %}
+                <div class="content-note main-section">
+                  <div class="guest-note">
+                      <div class="guest-info d-flex justify-content-between">
+                        <span>
+                            NO. {{ forloop.counter }}&nbsp;
+                            <a href="{% url 'mypage:home' nickname=book.writer.nickname %}" class="span-note">{{ book.writer.nickname }}</a>
+                            &nbsp;{{ book.created_at }}
+                        </span>
+                        {% if book.writer.id == writer.id or writer.id == master.id %}
+                        <form id="delete-form" data-url="{% url 'mypage:book_detail' guestbook_id=book.id %}">
+                            {% csrf_token %}
+                            <button type="button" class="delete-button" onclick="confirmDelete()">삭제</button>
+                        </form>                     
+                        {% endif %}
+                      </div>
+                  
+                      <div class="guest-content">
+                          <div class="guest-profile">
+                              <a href="{% url 'mypage:home' nickname=book.writer.nickname %}"><img class="guest-image" src="{{ book.writer.profile_img.url }}" alt="방명록 프로필"></a>
+                          </div>
+                          <div class="guest-message">
+                              {{ book.content }}
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                  <h3 class="no-note align-items-center"> 작성된 방명록이 없습니다.</h3>
+                {% endif %}
+                
+                
+              </div>
+            </div>
+          </div>
+          <!-- 메뉴 버튼 구성 요소-->
+          {% include "mypage/menu.html" %}
+
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block script %}
+<!-- jQuery 라이브러리를 로드 -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // 
+    $(document).ready(function() {
+    // delete-button 클래스를 가진 요소가 클릭되었을 때 실행
+    $('.delete-button').click(function() {
+        // 확인 메시지 띄우기
+        var isConfirmed = confirm("정말 삭제하시겠습니까?");
+
+        // 확인 버튼을 눌렀을 때만 삭제 요청 수행
+        if (isConfirmed) {
+            // 토큰 값 할당
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+            // 클릭된 요소에서 가장 가까운 <form> 요소를 찾고, 
+            // data-url 속성의 값을 가져와 url 변수에 할당합니다.
+            var url = $(this).closest('form').data('url');
+
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
+                // 삭제 성공한 후 수행할 동작
+                success: function() {
+                    location.reload();
+                },
+                // 요청이 실패했을 때 실행될 함수
+                error: function(xhr, status, error) {
+                    // 오류 메시지를 콘솔에 출력합니다.
+                    console.error('Failed to delete book:', error);
+                }
+            });
+        }
+    });
+});
+
+  </script>
+{% endblock %}

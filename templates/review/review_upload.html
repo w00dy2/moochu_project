@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}review{% endblock %}
+{% load static %}
+{% load hanja_filter %}
+{% load review_movie %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'review.css' %}">
+
+
+    <div class="container">
+        
+        <h5 class="border-bottom pb-2" style="color:white;">
+            {% if movie.titleKr|hanja_style %}
+                <span style="font-size: 30px; color: #96FC72">{{ movie.titleKr|hanja_style|safe }}</span> <!-- 한자 부분에 한자용 글꼴 적용 -->
+            {% else %}
+                <span style="font-size: 30px; color: #96FC72">{{ movie.titleKr|safe }}</span> <!-- 한글 부분은 일반 글꼴 적용 -->
+            {% endif %}
+            &nbsp;리뷰 작성
+        </h5>
+
+        <div class="movie-container">
+            <div class="poster-image">
+                {% with poster_url="https://storage.googleapis.com/end_moochu/"|add:movie.id|add:".jpg" %}
+                    {% if poster_url|url_exists %}
+                        <img src="{{ poster_url }}" alt="{{ movie.titleKr }}"> 
+                    {% else %}
+                        <img src="{% static 'images/poster.png' %}" alt="기본 사진">
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="movie-info">
+            <form method="post" class="post-form">
+                {% csrf_token %}
+                <!-- 오류표시 -->
+                {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                    {% for field in form %}
+                        {% if field.errors %}
+                        <strong>{{ field.label }}</strong>
+                        {{ field.errors }}
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-group movie-info">
+                    <textarea class="form-control" name="content"
+                            id="content" rows="22">{{ form.content.value|default_if_none:'' }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-review" style="margin-bottom: 100px;">업로드하기</button>
+            </form>
+        </div>
+        </div>
+    </div>
+{% endblock %}

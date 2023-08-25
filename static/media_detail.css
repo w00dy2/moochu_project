@@ -1,0 +1,205 @@
+.movie-rate { /* 별점 상자 */
+    font-family: 'NanumBarunpen';
+    color:#96FC72;
+    display: flex;
+    white-space: nowrap;
+    justify-content: space-between;
+    width: auto; /* 박스 크기 */
+    margin-top: 20px;
+}
+.movie-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start; /* 세로 정렬: top */
+    gap: 20px;
+    padding: 20px;
+    border: 2px solid #96FC72;
+    position: relative;
+}
+.hanja-font {
+    font-family: 'Heiti'; /* 한자용 글꼴 설정 */
+}
+/* 리뷰 작성 폼 */
+.review-container {
+    display: flex;
+    padding: 20px;
+    /* border: 2px solid #96FC72; */
+    position: relative;
+}
+.nickname, .nickname:hover{
+    color:white;
+    text-decoration: none;
+}
+.btn-review{
+    color:#2C2E34;
+    background-color:#96FC72;
+    border-color:#96FC72;
+    font-family: 'NanumBarunpen';
+    justify-content: right;
+}
+.btn-review2{
+    color:white;
+    background-color:transparent;
+    border-color:white;
+    font-family: 'NanumBarunpen';
+}
+.btn-review2:hover{
+    color:#96FC72;
+    background-color:transparent;
+    border-color:#96FC72;
+    font-family: 'NanumBarunpen';
+}
+.movie-review{
+    color: #96FC72;
+    font-family: NanumBarunpen;
+    text-decoration: none;
+    font-weight: bolder;
+}
+.review-content{
+    color: #C0DBB6;
+    font-family: 'NanumBarunpen';
+    text-decoration: none;
+    font-size: 20px;
+}
+.review-content:hover{
+    color: #C0DBB6;
+    font-family: 'NanumBarunpen';
+    text-decoration: none;
+}
+.badge-review{
+    border: 1px solid transparent;
+}
+.review-body{
+    background-color: #2C2E34; 
+    border-top: 1px solid #96FC72;
+}
+.poster-image {
+    position: relative;
+    margin-right: 20px; /* 이미지와 오른쪽 요소 사이 간격 */
+}
+.poster-image img {
+    width: 400px;
+    height: 600px;
+}
+.media_title{
+    color: #96FC72;
+    /* 테두리 효과 */
+    text-shadow: -0.5px -0.5px 0 #96FC72, 0.5px -0.5px 0 #96FC72, -0.5px 0.5px 0 #96FC72, 0.5px 0.5px 0 #96FC72; 
+    font-weight: bolder;
+    letter-spacing: 3px;
+    padding: 5px 0 10px 0;
+    font-family: NanumBarunpen, Heiti;
+}
+.movie-info {
+    background-color: #2C2E34;
+    padding: 10px;
+    color: #fff;
+}
+.movie-info h1, .movie-info h3, .movie-info h5 {
+    margin: 0;
+}
+.genres {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.genres span {
+    margin-right: 10px;
+    color: #96FC72;
+    font-weight: bold;
+    font-family: NanumBarunpen;
+}
+h1, h3, h4 {
+    margin-bottom: 5px;
+}
+.section-container {
+    font-size: 18px;
+    font-family: NanumBarunpen;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.movie-info .rating {
+    padding: 3px 6px;
+    font-weight: bold;
+}
+
+.movie-info .genres span {
+    margin-right: 5px;
+}
+
+.review-list {
+    margin-top: 20px;
+}
+
+.review-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.review-item h4 {
+    margin: 0;
+}
+
+.review-item p {
+    margin: 0;
+}
+
+.review-all, .review-all:hover{
+    color: white;
+    font-family: NanumBarunpen;
+    text-decoration: none;
+    font-size: 20px;
+    justify-content: right;
+    border:none;
+}
+
+.review-form {
+    margin-top: 20px;
+}
+
+.review-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.review-form textarea {
+    width: 100%;
+    height: 100px;
+}
+
+.review-form button {
+    margin-top: 10px;
+}
+
+.adult {
+    border: 3px solid pink;
+    color: pink;
+}
+.over15 {
+    border: 3px solid slateblue;
+    color: slateblue;
+}
+.all {
+    border: 3px solid aquamarine;
+    color: aquamarine;
+}
+.over12{
+    border: 3px solid steelblue;
+    color: steelblue;
+}
+.black{
+    border: 3px solid gainsboro;
+    color: gainsboro;
+}
+.movie-rating {
+    background-color: #2C2E34;
+    padding: 5px;
+    color: #fff;
+}
+.movie-rating h8,
+.movie-info h6,
+.movie-info h7 {
+    margin: 0;
+}

@@ -1,0 +1,146 @@
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}
+
+<div class="bookcover">
+  <div class="bookdot">
+    <div class="page">
+
+              <!-- 왼쪽 프로필 페이지 구성요소 -->
+    {% include "mypage/profile.html" %}
+
+      <div class="content-container">
+              <!-- 오른쪽 페이지 상단 글씨  -->
+        <div class="header content-title">
+          <div class="content-title-name"> <span style="color: #FF8540;">{{ master.nickname }}</span> 님의 마이페이지</div>
+        </div>
+              <!-- 오른쪽 페이지 구성 -->
+        <div class="box content-box">
+          <div class="scroll-box">
+              <div class="box-title">인생 명작 TOP 5
+                {% if writer.id == master.id %}
+                <a class="toggle-votes">
+                  <a method="POST" href="{% url 'mypage:Toplist' nickname=master.nickname %}" id="view-all-votes">
+                    추가 및 삭제
+                  </a>
+                  {% endif %}
+              </div>
+
+              <div class="poster-container">
+                {% if toplist %}
+                  {% for media in toplist %}    
+                    <a href="{% url 'moochu:movie_detail' movie_id=media.media_id %}"><img class="poster-img" src="https://storage.googleapis.com/end_moochu/{{media.media_id}}.jpg" ></a>
+                  {% endfor %}
+                {% else %}
+                  <h3 class="no-note"><span style="color: #FF8540;">{{ master.nickname }}</span>  님의 인생작 목록이 존재하지 않습니다.</h3>
+                {% endif %}
+              </div>
+              <br />
+              <br />
+          
+              <div class="box-right-flex">
+                <div class="news-flex-box">
+                  
+                  <div class="news-box">
+                    <div class="follow-title">
+                      <img src="{% static 'user_orange.png' %}" style="max-height: 25px; margin-bottom: 5px; font-weight: 900;"> 
+                      <span style="color: #FF8540;">Followers</span> List
+                    </div>
+                      {% if follower %}
+                      {% for follow in follower%}
+                        <div class="news-row">
+                          <div>
+                            <img class="follow-img" src="{{follow.follower.profile_img.url }}">
+                            <span class="username">{{ follow.follower.username }}</span>
+                            <a href="{% url 'mypage:home' nickname=follow.follower.nickname %}" class="nickname">{{ follow.follower.nickname }}</a>
+                          </div>
+                            {% if follow.follower == writer or writer == master %}
+                            <form id="delete-button" data-url="{% url 'mypage:follower' follow_id=follow.id %}" method="delete">
+                              {% csrf_token %}
+                              <button class="follow-btn btn-sm" type="delete-button">삭제</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                      {% endfor %}
+                      {% else %}
+                        <div>
+                          <h3 class="no-follow"> * 팔로워 목록이 없습니다.</h3>
+                        </div>
+                      {% endif %}
+                  </div>
+
+                  <div class="update-box">
+                    <div class="follow-title">
+                      <img src="{% static 'user_orange.png' %}" style="max-height: 25px; margin-bottom: 5px; font-weight: 900;"> 
+                      <span style="color: #FF8540;">Following</span> List
+                    </div>
+                    {% if following %}
+                    {% for follow in following%}
+                      <div class="menu-row">
+                        <div>
+                          <img class="follow-img" src="{{follow.following.profile_img.url }}">
+                          <span class="username">{{ follow.following.username }}</span>
+                          <a href="{% url 'mypage:home' nickname=follow.following.nickname %}" class="nickname"> {{ follow.following.nickname }}</a>
+                        </div>
+                          {% if follow.following == writer or writer == master%}
+                          <form id="delete-button" data-url="{% url 'mypage:follower' follow_id=follow.id %}" method="delete">
+                            {% csrf_token %}
+                            <button class="follow-btn btn-sm" type="delete-button">팔로우 취소</button>
+                          </form>
+                          {% endif %}
+                      </div>
+                    {% endfor %}
+                    {% else %}
+                      <div>
+                        <h3 class="no-follow"> * 팔로잉 목록이 없습니다.</h3>
+                      </div>
+                    {% endif %}
+                  </div>
+                  
+                </div>
+              </div>
+                            
+                            
+            </div>
+          </div>
+        </div>
+                  <!-- 메뉴 버튼 구성 요소-->
+                  {% include "mypage/menu.html" %}
+          
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#delete-button').submit(function(e) {
+      e.preventDefault();
+            
+      var form = $(this);
+      var url = form.data('url');
+      
+      $.ajax({
+        url: url,
+        type: 'DELETE',
+        data: form.serialize(),
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        },
+        success: function(response) {
+
+          location.reload();
+        },
+        error: function(xhr, status, error) {
+
+          console.error('Failed to cancel follow:', error);
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

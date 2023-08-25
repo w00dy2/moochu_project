@@ -1,0 +1,189 @@
+movie_genre.html
+
+<!-- sidebar.html -->
+
+{% load review_filters %}
+{% load static %}
+<style>
+.sidebar {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    flex-wrap: wrap; 
+    margin: 20px auto;
+    width: 100%; 
+    max-width: 100%; 
+}
+
+button[type="submit"] {
+    display: inline-block;
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #96FC72;
+    color: #2C2E34;
+    font-size: 15px;
+    font-family: Chonburi;
+    border: 1px solid transparent;
+
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+button[type="submit"]:hover {
+    background-color: white;
+    color: #96FC72;
+    border: 1px solid #96FC72;
+}
+
+button[type="submit"]:active {
+    transform: scale(0.9);
+}
+
+.genre-checkbox {
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.ott-logos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* 장르 체크 박스 스타일을 추가합니다. */
+.ott-logos div {
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.ott-logos input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+input[type="checkbox"] {
+/* 체크박스 스타일 지정 */
+-webkit-appearance: none;
+width: 20px;
+height: 20px;
+flex-shrink: 0;
+margin-right: 5px;
+background: white;
+border-radius: 0.3rem;
+border-color: #96FC72;
+border-width: 0.2rem;
+}
+
+input[type="checkbox"]:checked {
+/* 체크된 상태의 스타일 지정 */
+-webkit-appearance: none;
+width: 20px;
+height: 20px;
+flex-shrink: 0;
+margin-right: 5px;
+background: #96FC72;
+border-radius: 0.3rem;
+border-color: white;
+border-width: 0.2rem;
+}
+
+.ott-logos-box2{
+    border-bottom: 1px solid #96FC72;
+    display: flex;
+    justify-content: center; 
+    margin: 20px auto; 
+    flex-wrap: wrap; 
+    width: 100%; 
+    max-width: 100%; 
+}
+.back-button {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+}
+    
+</style>
+
+
+<div class="container">
+<div class="sidebar">
+    <form action="{% url 'moochu:genre_filter' ott=ott media_type=type %}" method="get">
+        {% if genres %}
+            <div class="ott-logos-box2" style="margin: auto;">
+                <div class="d-flex" style="flex-wrap: wrap; color:white; position: relative; font-size: 15px;font-family: NanumBarunpen;">
+                    {% if genres|length > 0 %}
+                        <div style="width: calc(5%); color:white; text-align: center; display: flex; align-items: center; margin-bottom: 10px;">
+                            <!-- 버튼 리셋 -->
+                            <button style="background: none; border: none; margin:0;" onclick="resetFilters();"><a href="{% url 'moochu:ott_media_list' ott='All' media_type=type %}">
+                                <!-- <img class="back-button" src="{% static 'reset_green.png' %}" alt="Back"> -->
+                                <i class="fa-solid fa-arrow-rotate-left fa-2xl" style="color: #96fc72;"></i>
+                            </a></button>
+                        </div>
+                    {% endif %}
+                {% for genre in genres %}
+                    <div style="width: calc(95% / 13); color:white; text-align: center; display: flex; align-items: center; margin-bottom: 10px;">
+                        <input type="checkbox" name="genres" value="{{ genre }}" {% if genre in selected_genres %}checked{% endif %}>
+                        {% if '/' in genre %}
+                            <label for="genre" style="margin-top: 5px;">{{ genre|format_slash|remove_after_parenthesis|safe }}</label>
+                        {% else %}
+                            <label for="genre" style="margin-top: 5px;">{{ genre|remove_after_parenthesis }}</label>
+                        {% endif %}
+                    </div>
+                {% if forloop.counter == 13 %}
+                    <div style="width: calc(5%); color:white; text-align: center; display: flex; align-items: center; margin-bottom: 10px;">
+                        <!-- 버튼 필터 -->
+                        <button style="background: none; border: none;">
+                            <i class="fa-solid fa-filter fa-2xl" style="color: #96fc72;"></i>
+                            <!-- <img class="back-button" src="{% static 'filter_green.png' %}" alt="Filter"> -->
+                        </button>
+                    </div>
+                {% endif %}
+                {% endfor %}
+            
+            </div>
+        {% else %}
+            <h1>장르없음</h1>
+        {% endif %}
+    </form>
+</div>
+</div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function resetFilters() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+    }
+
+    // 장르 텍스트를 클릭하면 해당 장르 체크박스를 체크/언체크하는 함수
+    function toggleGenre(checkboxId) {
+        const checkbox = document.getElementById(checkboxId);
+        checkbox.checked = !checkbox.checked;
+    }
+
+    $(document).ready(function() {
+        // 스크롤 이벤트 처리
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 100) {
+                $('#back-to-top').fadeIn();
+            } else {
+                $('#back-to-top').fadeOut();
+            }
+        });
+
+        // 버튼 클릭 시 상단으로 부드럽게 스크롤
+        $('#back-to-top').click(function() {
+            $('html, body').animate({ scrollTop: 0 }, 800);
+            return false;
+        });
+    });
+</script>

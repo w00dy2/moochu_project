@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}Review{% endblock %}
+{% load static %}
+{% load board_filter %}
+{% load hanja_filter %}
+{% load review_movie %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'review.css' %}">
+    <style>
+        @import 
+        url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+    
+    </style>
+
+<div class="container">
+    {% csrf_token %}
+
+    <h2 class="border-bottom py-2"></h2>
+
+    <div class="post-title"> 
+        <a href="{% url 'moochu:movie_detail' movie.id %}" style="text-decoration: none;">
+            <div class="image-title-container">
+                <div class="image-container">
+                    {% with poster_url="https://storage.googleapis.com/end_moochu/"|add:movie.id|add:".jpg" %}
+                        {% if poster_url|url_exists %}
+                            <img src="{{ poster_url }}" style="height: 100px;" alt="{{ movie.titleKr }}">
+                        {% else %}
+                            <img src="{% static 'images/poster.png' %}" style="height: 100px;" alt="기본 사진">
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                {% if movie.titleKr|hanja_style %}
+                    <div class="title-container">{{ movie.titleKr|hanja_style|safe }}</div> <!-- 한자 부분에 한자용 글꼴 적용 -->
+                {% else %}
+                    <div class="title-container">{{ movie.titleKr|safe }}</div>
+                {% endif %}
+            </div>
+        </a>
+    </div>
+    
+    
+
+    <div class="info">
+        <dl>
+            <dt>작성자</dt>
+            <dd><a class="nickname" href="{% url 'mypage:home' nickname=review.writer.nickname %}">{{review.writer}}</a></dd>
+        </dl>
+        <dl>
+            <dt>작성일</dt>
+            <dd>{{review.create_date}}</dd>
+        </dl>
+        <dl>
+            <dt>조회</dt>
+            <dd>{{review.n_hit}}</dd>
+        </dl>
+    </div>
+
+    <!-- 게시판 글 내용 -->
+    <div class="content">
+        {{ review.content|linebreaksbr|safe }}      <!-- linebreaksbr: enter인식해서 보여줌 -->
+    </div>
+
+    <div class="row my-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="vote">
+                <a href="#" data-uri="{% url 'review:vote_review' review.id %}" style="text-decoration: none;"
+                    class="recommend btn btn-sm" data-voted="{{ voted|lower }}" data-is-writer="{{ is_writer|lower }}">
+                    <span class="icon-thumbs-up" style="color: #96fc72; font-size: 20px;"></span>
+                    <span style="font-family: Chonburi; font-size: 17px; color: white;margin-left: 5px;">{{ review.voter.count }}</span>
+                </a>
+            </div>
+    
+            {% if request.user == review.writer %}
+            <div class="my-3">
+                <a href="{% url 'review:review_edit' review.media_id review.id %}" class="btn btn-sm btn-review1">수정</a>
+                <a href="#" class="delete btn btn-sm btn-review1" data-uri="{% url 'review:review_delete' review.id %}">삭제</a>
+            </div>
+            {% endif %}    
+        </div>
+    </div>
+    
+
+ 
+    <h9 class="comment-count"><span style="font-family: Chonburi; font-size: 17px; color:#96FC72;margin-left: 5px;">{{ review.review_comments.count|default_if_none:"0" }}</span>&nbsp;개의 댓글이 있습니다.</h9> <!-- 리뷰에 달린 댓글 갯수 -->
+ 
+    {% if review.review_comments.count > 0 %}
+        <div class="mt-3">
+            {% for review_comment in review.review_comments.all %}
+<div class="card my-3" style="border: 1px solid transparent; background-color: transparent;">
+    <div class="card-body comment-body">
+        <div class="badge badge-comment d-flex align-items-center">
+            <div class="mr-2" style="font-size: 15px;"><a class="nickname" href="{% url 'mypage:home' nickname=review_comment.writer.nickname %}">@{{ review_comment.writer.username }}</a></div>
+            {% if review_comment.modify_date %}
+            <div style="color: lightgray;">{{ review_comment.modify_date }} (수정됨)</div>
+            {% else %}
+            <div style="color: lightgray;">{{ review_comment.create_date }}</div>
+            {% endif %}
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="card-text review_comment-content" style="white-space: pre-line; margin-top: 10px; margin-left: 5px;">{{ review_comment.content|safe }}</div>
+            {% if request.user == review_comment.writer %}
+            <div class="my-3">
+                <a href="{% url 'review:review_comment_edit' review_comment.id  %}" class="btn btn-sm btn-review1 mr-2" style="margin-left:0;">수정</a>
+                <a href="#" class="delete btn btn-sm btn-review1" style="margin-left:0;" data-uri="{% url 'review:review_comment_delete' review_comment.id  %}">삭제</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+            
+        </div>
+    {% endif %}
+
+
+    <form action="{% url 'review:review_comment_create' review.id %}" method="post" style="margin-top: 10px;">
+    {% csrf_token %}
+    <textarea class="comment_text" name="content" id="content" rows="2" required></textarea>
+    <input class="btn btn-review" type="submit" value="댓글 작성" style="font-family: 'NanumBarunpen'; margin-bottom: 100px;">
+    </form>
+</div>
+
+
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $(".delete").on('click', function() {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                location.href = $(this).data('uri');
+            }
+        });
+        
+        $(".recommend").on('click', function() {
+            var errorMessage = "";
+            if (confirm("정말로 추천하시겠습니까?")) {
+                if ($(this).data('voted')) {
+                    errorMessage = "이미 추천했습니다.";
+                } else if ($(this).data('is-writer')) {
+                    errorMessage = "본인 글에는 추천할 수 없습니다.";
+                } else {
+                    location.href = $(this).data('uri');
+                }
+            }
+            
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+        });
+    });
+</script>
+    
+    
+{% endblock %}

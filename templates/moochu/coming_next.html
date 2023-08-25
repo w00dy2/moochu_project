@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}What's New{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'coming_next.css' %}">
+
+<div class="container">
+    <html>
+    <body>
+        <div class="coming-movie-content">
+            <h1 class="coming-movie-content-head">개봉예정작</h1>
+            {% for d_day, movies in sorted_groups %}
+            <div class='coming-movie-groups'>
+                <div class='d-day-container'>
+                    <h3 class='coming-movie-groups-head'>
+                        {% if d_day == 0 %}
+                            Today! <i class="fa-solid fa-hands-clapping"></i>
+                        {% else %}
+                            D - {{ d_day }}
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="slider-container{% if movies|length > 4 %} with-buttons{% endif %}">
+                  <div class="slider-wrapper">
+                        <div class="images-row d-flex swiper-container">
+                            {% for movie in movies %}
+                                <div class="coming-movie-card swiper-slide">
+                                    <a href="{% url 'moochu:movie_detail' movie_id=movie.id %}">
+                                        {% if movie.poster_image_url %}
+                                          <img class="coming-movie-card-img swiper-image" src="{{ movie.poster_image_url }}" />
+                                        {% else %}
+                                          <img class="coming-movie-card-img swiper-image" src="{% static 'images/ott_logo/moochu.png' %}" />
+                                        {% endif %}
+                                          <div class="coming-movie-card-bottom">
+                                            {{ movie.title_kr }}
+                                        </div>
+                                        <div class="coming-movie-logo">
+                                            <div class="logo-container">
+                                                {% for ott in movie.OTT %}
+                                                <img class="coming-movie-logo-img" src="{% static 'images/ott_logo/btn_squircle_'|add:ott|add:'.png' %}" alt="{{ ott }} logo">
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="slider-btn slider-btn-prev">&#8249;</button>
+                    <button class="slider-btn slider-btn-next">&#8250;</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </body>
+    </html>
+</div>
+<script>
+  const sliderContainers = document.querySelectorAll('.slider-container');
+
+  sliderContainers.forEach((container) => {
+      const sliderWrapper = container.querySelector('.images-row');
+      const prevBtn = container.querySelector('.slider-btn-prev');
+      const nextBtn = container.querySelector('.slider-btn-next');
+      const posterWidth = container.offsetWidth / 4.5;
+      const posterCount = sliderWrapper?.childElementCount;
+      let slideIndex = 0;
+
+      const slideToIndex = (index) => {
+        const visiblePostersCount = Math.ceil(container.clientWidth / posterWidth);
+        const lastIndex = posterCount - visiblePostersCount;
+
+        if (index > lastIndex) {
+            index = lastIndex;
+        }
+        if (index < 0) {
+            index = 0;
+        }
+
+        const translateX = -index * posterWidth;
+        sliderWrapper.style.transform = `translateX(${translateX}px)`;
+
+        if (visiblePostersCount < posterCount) {
+            prevBtn.style.display = (index > 0) ? 'block' : 'none';
+            nextBtn.style.display = (index < lastIndex) ? 'block' : 'none';
+        }
+    };
+
+    const initializeSliderAndViewButtons = () => {
+      const visiblePostersCount = Math.ceil(container.clientWidth / posterWidth);
+      const lastIndex = posterCount - visiblePostersCount;
+      const shouldBeVisible = lastIndex > 0;
+
+      slideToIndex(slideIndex);
+
+      // Update the button visibility
+      if (shouldBeVisible) {
+        prevBtn.style.display = slideIndex > 0 ? 'block' : 'none';
+        nextBtn.style.display = slideIndex < lastIndex ? 'block' : 'none';
+      } else {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+      }
+    };
+
+    const sliderButtons = container.querySelectorAll('.slider-btn');
+
+    sliderButtons.forEach((btn) => {
+          btn.addEventListener('click', () => {
+              if (btn.classList.contains('slider-btn-prev')) {
+                  slideIndex -= 3;
+              } else if (btn.classList.contains('slider-btn-next')) {
+                  slideIndex += 3;
+              }
+              slideToIndex(slideIndex);
+          });
+    });
+
+    // Initialize slider and button visibility
+    initializeSliderAndViewButtons();
+
+    // Listen for window resizing and update button visibility accordingly
+    window.addEventListener("resize", initializeSliderAndViewButtons);
+  });
+</script>
+
+{% endblock %}

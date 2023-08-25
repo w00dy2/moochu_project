@@ -1,0 +1,187 @@
+@media (min-width: 768px) {
+  .row {
+      margin-left: -10px;
+      margin-right: -10px;
+  }
+
+  .col-lg-3,
+  .col-md-4,
+  .col-sm-6 {
+      padding-left: 5px; 
+      padding-right: 5px;
+  }
+}
+
+
+.url {
+  color: white;
+}
+
+.coming-movie-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 1.5rem 0.75rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+.coming-movie-groups-head {
+  color: white;
+  font-family: Chonburi;
+}
+
+
+.d-day-container {
+display: flex;
+justify-content: center;
+width: 100%;
+margin-bottom: 10px;
+}
+.coming-movie-content-head {
+  text-align: center;
+  color: #96FC72; 
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-family: NanumBarunpen;
+}
+
+.coming-movie-groups {
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  padding: 30px;
+  flex-wrap: wrap;
+  border-top: 1px solid #96FC72;
+}
+
+.coming-movie-card {
+  position: relative;
+  flex-basis: calc(50% - 1.5rem);
+  box-sizing: border-box;
+  margin: 0 0.5rem 1.5rem;
+}
+
+.coming-movie-card-img {
+margin: 0;
+border-radius: 10px;
+border: 3px solid #96FC72;
+max-height: 290px;
+position: relative;
+
+}
+
+
+.coming-movie-card .poster-img {
+  margin: 0;
+  border-radius: 10px;
+  border: 3px solid #96FC72;
+  max-height: 290px;
+  position: relative;
+}
+
+
+
+.coming-movie-card-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  background-color: #96fc72;
+  color: #2c2e34;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-family: NanumBarunpen;
+  width: 100%;
+  border-radius: 0px 0px 10px 10px;
+}
+
+
+.coming-movie-card:hover .coming-movie-card-bottom {    
+  opacity: 1;
+}
+
+.coming-movie-logo {
+  position: absolute; 
+  top: 5px; 
+  right: 3px; 
+}
+.logo-container {
+  margin-right: 10px;
+}
+
+.logo-container img {
+  height: 100%;
+  margin-top: 5px; 
+  margin-right: 3px;
+  border-radius: 20px;
+  border: 1px solid #2C2E34;
+}
+
+.coming-movie-logo-img {
+  margin-right: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 30px;
+  z-index: 10;
+  transform: translateY(-50%);
+}
+.slider-btn-prev {
+  left: 0;
+}
+
+.slider-btn-next {
+  right: 0;
+}
+
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.slider-wrapper {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  min-width: 100%;
+}
+.slider-wrapper::-webkit-scrollbar{
+display: none;
+}
+
+.images-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.slider-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: transform 0.4s ease;
+}
+.slider-container.with-buttons .slider-btn {
+  display: block;
+}

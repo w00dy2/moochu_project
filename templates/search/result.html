@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}search{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'search.css' %}">
+
+<!-- 실시간 급상승 검색어 순위 -->
+<div class="container">
+  <form action="{% url 'search:search' %}" method="GET">
+      <div class="input-group">
+          <input type="text" class="form-control grayed-input" id="search" name="search" placeholder="검색어를 입력하세요">
+          <button class="btn btn-search" type="submit">검색</button>
+      </div>
+  </form>
+  
+  {% if data %}
+  <div class="search-media">
+    {% for media in data %}
+    <div class="col-lg-3 col-md-4 col-sm-6">
+      <div class="search-card mb-4">
+        <a href="{% url 'moochu:movie_detail' movie_id=media.id %}">
+          <div class="aspect-ratio-container">
+            <div class="aspect-ratio-content">
+              <div class="image-container">
+                <img src="https://storage.googleapis.com/end_moochu/{{media.id}}.jpg" alt="영화 포스터" title="{{ media.title }}">
+                <div class="overlay"></div>
+              </div>
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ media.title }}</h5>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>  
+    {% endfor %}
+  </div>
+  {% else %}
+    <h4 style="font-family: NanumBarunpen; color: #96FC72; text-align: center; margin-top: 5%;" >검색결과가 존재하지 않습니다.</h2>
+  {% endif %}
+
+
+  
+</div>
+
+{% endblock %}

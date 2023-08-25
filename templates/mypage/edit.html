@@ -1,0 +1,114 @@
+{% extends 'base_my.html' %}
+{% block title %}mypage{% endblock %}
+{% load static %}
+{% block content %}
+    <div class="bookcover">
+      <div class="bookdot">
+        <div class="page">
+
+                    <!-- 왼쪽 프로필 페이지 구성요소 -->
+                    {% include "mypage/profile.html" %}
+
+
+          <div class="content-container">
+                            <!-- 오른쪽 페이지 상단 글씨  -->
+            <div class="header content-title">
+              <div class="content-title-name"> <span style="color: #FF8540;">{{ master.nickname }}</span> 님의 마이페이지</div>
+            </div>
+                            <!-- 오른쪽 페이지 구성 -->
+            <div class="box content-box">
+              <div class="scroll-box">
+                <div class="box-title">프로필 수정</div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <form id="profile-form" enctype="multipart/form-data">
+                  {% csrf_token %}
+                              
+                  <!-- 사용자오류 표시 -->
+                  {% if form.errors %}
+                  <div class="alert alert-danger">
+                      <ul>
+                          {% for field in form %}
+                              {% for error in field.errors %}
+                                  <li style="font-size: 14px;"> {{ field.label }}: {{ error }}</li>
+                              {% endfor %}
+                          {% endfor %}
+                      </ul>
+                  </div> 
+                  {% endif %}
+              
+                  <label class="mypage-edit">닉네임:</label>
+                  <input class="input-group2" type="text" name="nickname" value="{{ form.nickname.value }}" required><br>
+                  {% if form.nickname.errors %}
+                      <div class="error-message">
+                          {{ form.nickname.errors.as_text }}
+                      </div>
+                  {% endif %}
+                
+                  <label class="mypage-edit">프로필 사진:</label>
+                  <input type="file" name="profile_img" style="font-family: NanumBarunpen;"><br>
+                
+                  <label class="mypage-edit">한줄 소개:</label>
+                  <textarea class="input-group2" name="comment" rows="3" >{{ form.comment.value|safe }}</textarea><br>
+                     
+                  
+                  <button class="btn-mypage" type="submit" style="margin-top: 100px;">수정하기</button>
+                </form>
+                
+                
+              </div>
+            </div>
+          </div>
+                    <!-- 메뉴 버튼 구성 요소-->
+                    {% include "mypage/menu.html" %}
+
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block script %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  $('#profile-form').submit(function(e) {
+    e.preventDefault();
+    
+    var form = $(this);
+    var url = form.attr('action');
+    var formData = new FormData(form[0]);
+    
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        data: formData,
+        processData: false,
+        contentType: false,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        },
+        success: function(response) {
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            console.error('프로필 저장 실패:', error);
+            alert('프로필 저장에 실패했습니다');
+        }
+    });
+});
+
+function checkCharacterLimit(textareaElement) {
+    const maxLength = parseInt(textareaElement.getAttribute('maxlength'));
+    const currentLength = textareaElement.value.length;
+
+    if (currentLength > maxLength) {
+      alert(`한줄 소개는 ${maxLength}자 이하로 입력해주세요.`);
+      textareaElement.value = textareaElement.value.substring(0, maxLength);
+    }
+  }
+</script>
+
+{% endblock %}
