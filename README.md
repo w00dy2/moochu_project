@@ -1,5 +1,20 @@
 # MooChu
 
+![image](https://github.com/w00dy2/moochu_project/assets/123388251/daf10980-ea2a-4af3-b17b-a40219b03a1a)
+Movie 추천을 줄인 말
+
+<div align=center><h1>📚 Architecture</h1></div>
+<br>
+
+![image](https://github.com/w00dy2/moochu_project/assets/123388251/0ef90046-8046-43f5-958b-0ec8ef39c7d1)
+<br>
+<div align=center><h1>📚 ERD</h1></div>
+
+![image](https://github.com/w00dy2/moochu_project/assets/123388251/83ffb8ff-77cb-4d04-9cde-45b9a1f900c6)
+
+
+
+
 <div align=center><h1>📚 STACKS</h1></div>
 
 <div align=center> 
@@ -48,4 +63,6 @@
   <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
   <br>
 </div>
-# moochu movie recommend project
+
+영화 추천 프로젝트
+
