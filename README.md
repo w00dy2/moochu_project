@@ -1,6 +1,8 @@
 # MooChu
 
 ![image](https://github.com/w00dy2/moochu_project/assets/123388251/daf10980-ea2a-4af3-b17b-a40219b03a1a)
+
+<br>
 Movie 추천을 줄인 말
 
 <div align=center><h1>📚 Architecture</h1></div>
