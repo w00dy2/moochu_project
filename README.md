@@ -78,9 +78,9 @@ src="https://github.com/jsjang96/images/blob/master/%EC%95%84%ED%82%A4%ED%85%8D%
 ### 1. 영화, TV show 대량 데이터 수집 및 전처리
 <br>
 
-- TMDB API를 활용하여 파이썬 코드를 기간별로 구분지어 영화 정보를 약 60만건 수집하게 되었습니다.
-- 하지만 오래된 공연DVD와 같은 영화, TV 프로그램이외의 data가 절반 이상을 차지하였으며,
-- 데이터를 구분지을 key가 별도로 없었기에 전처리에 어려움이 있으며, 프로젝트 데이터로서의 가치가 부족하다고 판단하였습니다.
+- 영화 정보 제공 api인 TMDB API를 활용하여 파이썬 코드를 기간별로 구분지어 영화 정보를 약 60만건 수집하였습니다.
+
+- 하지만 팀원들이 원하는 데이터가 없었기 때문에 논의를 통해 해당 데이터를 포기하게 되었습니다.
 
 <br>
 
@@ -92,13 +92,14 @@ src="https://github.com/jsjang96/images/blob/master/%EC%95%84%ED%82%A4%ED%85%8D%
  	- json파일로 저장하여 병합하고 전처리를 하였습니다.
   
 **알게된 점**
- 	
+- 꽤 많은 시간이 걸려 진행한 프로세스일지라도 서로의 의견을 조율하여 빠르게 방안을 찾아가는 것이 중요하다는 것을 느꼈습니다.
+  
 - 데이터를 수집(크롤링)하는 과정에서 가져올 수 있는 정보들은 다 가져온 후 data lake에 적재 ->
-          이후 전처리하여 datawharehouse를 구축한다.
+          이후 전처리하여 datawharehouse를 구축하면 더 효율적인 일처리가 가능하다는 것을 알게 되었습니다.
     
-- 프로젝트를 하며 전처리를 할때 각 파트별로 필요한 부분을 확실히 설정해놓으면 시간을 절약할 수 있다.
+- 프로젝트를 하며 전처리를 할때 각 파트별로 필요한 부분을 확실히 설정해놓으면 시간을 절약할 수 있었습니다.
     
-- jira와 confluence 를 이용하여 일정 및 상황을 공유하면 팀원에게 따로 요청을 하지 않더라도 서로 필요한 부분을 공유 할 수 있다.
+- jira와 confluence 를 이용하여 일정 및 상황을 공유하면 팀원에게 따로 요청을 하지 않더라도 서로 필요한 부분을 공유할 수 있었습니다.
 
 <br>
 
@@ -111,10 +112,11 @@ Airflow repository : <a href="https://github.com/w00dy2/moochu_airflow">
 
   ### 2.1 크롤링 덱 자동화
   
-  - 팀원들과 함께 각자 작성해놓은 크롤링 코드를 전체적으로 통일하는 작업을 하였습니다.
+  - 팀원들과 함께 각자 작성해놓은 크롤링 코드를 통합하는 작업과, 이를 Airflow dag으로 만드는 작업을 하였습니다.
   
-  - 각 페이지에서 가져올 수 있는 데이터가 달랐기에 관람등급과 같은 데이터를 통일하는 전처리 작업을 해야했습니다.
-
+  - 팀원들과 어떠한 방법과 기준으로 크롤링 코드를 짰는지에 대해 코드리뷰를 하였고,<br>
+    통합방안에 대해 고민하고 코드를 개선할 수 있었습니다.
+  
   **Work Flow**
   
     - Airflow를 통해 MEGABOX, CGV, DAUM영화 에서 순차적으로 데이터를 수집 -> 
@@ -123,15 +125,30 @@ Airflow repository : <a href="https://github.com/w00dy2/moochu_airflow">
     
     - mongodb에 데이터를 적재 ->
     
-    - mongodb에서 자동으로 생성된 고유한 정보인 _id필드를 기준으로 poster image들의 이름을 설정->
+    - mongodb에서 자동으로 생성된 고유한 정보인 _id필드를 기준으로 poster image의 이름을 설정->
     
-    - Google Cloud Storage에 적재하는 과정을 배치로 airflow 자동화를 하였습니다.
+    - Google Cloud Storage에 적재하는 과정을 daily 배치로 airflow 자동화를 하였습니다.
 
     
   ### 2.2 사용자기반 추천 모델 자동화
+   - big Query ML으로 추천모델을 구상했지만 여건상 jupyter로 모델을 실행하게 되었습니다.
+     
+  **Work Flow**
+    
+    - django에서 Bigquery에 적재한 사용자의 로그데이터를 분석 ->
+    
+    - 사용자의 예상평점을 분석 및 추천 미디어 100개를 산출 ->
+    
+    - Redis로 전송하여 사용자에게 추천하는 모델
+    
     - Airflow로 추천모델을 구축해놓은 컨테이너로 ssh 연결
-    - 하루에 한번 추천 모델을 실행
-    - 실행 결과 slack api를 이용하여 확인
+    
+    - 하루에 한번 추천 모델을 실행 (사용자가 적은 시간대인 AM 3:00)
+    
+    - 실행 결과 slack api를 이용하여 확인  
+
+    
+
 
 ### 3. mongoDB에 데이터 적재, mongoDB와 django연동
   <br>
@@ -150,8 +167,10 @@ Airflow repository : <a href="https://github.com/w00dy2/moochu_airflow">
 #### 4.1 django 개봉예정작 페이지 제작
     
   - 영화 및 TV 프로그램의 개봉예정작 페이지를 제작하였습니다.
-- mongoDB에 있는 데이터들을 django에 가져와서 view단에서 today를 기준으로 공개예정일을 계산하여 페이지로 구현하였습니다.
-    - 각각의 영화 데이터가 어디에서 볼 수 있는지도 포스터 우측상단에서 보여줄 수 있게 작업하였습니다.
+  - mongoDB에 있는 데이터들을 django에 가져와서 view단에서 today를 기준으로 공개예정일을 계산하여 페이지로 구현하였습니다.
+  - 각각의 영화 데이터가 어디에서 볼 수 있는지도 포스터 우측상단에서 보여줄 수 있게 작업하였습니다.
+ 
+  - 
 
 #### 4.2 pagenation 코드 수정
 
@@ -161,25 +180,23 @@ Airflow repository : <a href="https://github.com/w00dy2/moochu_airflow">
 **알게된 점**
 
 - 처음에는 mongoDB의 데이터를 django와 mongodb가 연동이 가능한 djongo를 이용하라는 글이 많아서 해당 방법을 시도하였지만,
-- mongodb에 update, delete 작업이 아닌 data를 read 작업만 필요하였기에 pymongo로도 충분히 구현할 수 있었습니다.
+  mongodb에 update, delete 작업이 아닌 data를 read 작업만 필요하였기에 pymongo로도 충분히 구현이 가능하다는 것을 알 수 있었습니다.
 
 
-  
-  **Work Flow**
-  
-- django에서 Bigquery에 적재한 사용자의 로그데이터를 분석 ->
-    
-- 사용자의 예상평점을 분석 및 추천 미디어 100개를 산출 ->
-    
-- Redis로 전송하여 사용자에게 추천
+
 
 ## 트러블 슈팅
 
-### 1. 크롤링
-1.1 셀레니움을 이용하여 직접 OTT 사이트를 크롤링할 경우 지속적인 서비스 유지에 있어 airflow 배치가 불가능하다는 문제가 발생
-- 방안 : 데이터를 가져오는 방식을 바꿔 추가로 가져오는 데이터는 netflix, watcha, megawbox, CGV로 수정
+### 1. DB 적재
+1.1 tmdb api 활용하여 데이터를 수집
+- 매일 신규 데이터를 자동으로 추가하는 airflow dag까지 완성해놓은 상태였지만 팀원들과 상의 끝에 해당데이터를 사용하지 않기로 함. <br>
+  
 
-1.2 크롤링을 통해 메인 db를 구축하는 과정에 있어서 일정 데이터 개수가 넘어가면 IP blocking이 발생
+1.2 셀레니움을 이용하여 직접 OTT 사이트를 크롤링할 경우 지속적인 서비스 유지에 있어 airflow 배치가 불가능하다는 문제가 발생
+- 방안 : 데이터를 가져오는 방식을 requeests로 수정하였습니다.<br>
+
+1.3 크롤링을 통해 메인 db를 구축하는 과정에 있어서 일정 데이터 개수가 넘어가면 IP blocking이 발생
+- 방안 : 팀원들에게 부탁하여 각자 다른장소에서 일정량의 데이터를 수집할 수 있었습니다.
 <br>
 
 
@@ -187,55 +204,22 @@ Airflow repository : <a href="https://github.com/w00dy2/moochu_airflow">
 
 ### 2. Airflow - mongodb - googlestorage
 
-2.1 각각의 덱을 짜서 작업을 실행했을경우 같은 영화 정보를 처리하기 위해 read write를 계속 반복해야하는 문제가 있었음.
-- 하나의 덱으로 만들어 중복 데이터를 처리할 수 있게 작성
-  
-2.2 실제서비스를 고려하여 googlestorage에 포스터를 적재하는 흐름을 추가
-  - 해당 작업에서 고유한 id를 이용하기 위해 mongodb에서 자동 생성한 고유필드인 _id를 기준으로 storage에 적재하기로 결정
-- 먼저 _id값을 어떻게 다음 task에 넘겨줄 것인지에 고민
-  -> xcom을 이용하여 mongodb에 적재되는 과정에서 알 수 있는 _id값과 href 값을 넘겨주기로 결정 (limit 48kb)
-  - 각각의 task에서 push한 xcom을 merge하는 task를 거쳐 googlestorage 적재 task를 실행
+2.1 각각의 덱을 짜서 작업을 실행했을경우 같은 영화 정보를 처리하기 위해 read write를 계속 반복해야하는 문제가 있었습니다.<br>
+- 하나의 덱으로 만들어 중복 데이터를 처리할 수 있게 작성하였습니다.<br>
+
+2.2 직접 서비스를 최대한 구현하는 것을 목표로 하며 포스터 이미지를 직접 storage에 적재하여 보여주는 방식으로 변경하게되었습니다.<br>
+- 이미지들의 고유한 id를 이용하기 위해 mongodb에서 자동 생성한 고유필드인 _id를 기준으로 storage에 적재하기로 결정하였습니다.<br>
+<br>
+2.2.1 이미 저장된 데이터에서 이미지를 적재하는 것은 문제가 되지 않았지만,
+	마감일까지 시간이 얼마 남지 않은 상황에서 airflow dag에 이미지적재를 추가하는 것은 부담감이 컸습니다.<br>
+<br>
+- 필요한 데이터가 무엇인지에 대해 생각을 하며 최대한 효율적인 airflow dag의 관점에서만 생각하려고 노력하였습니다.<br>
+<br>
+  2.2.2 이미지를 적재하는 과정에서 DB를 조회하게 되면 그만큼 시간과 리소스 사용이 많아지기 때문에 이를 줄일 필요가 있었습니다.<br>
+<br>
+   -> xcom을 이용하여 mongodb에 적재되는 과정에서 알 수 있는 _id값과 href 값을 넘겨주기로 결정 (limit 48kb) <br>
+   - 각각의 task에서 push한 xcom을 merge하는 task를 거쳐 googlestorage 적재 task를 실행하여 불필요한 리소스 사용을 줄일 수 있었습니다.<br>
 
 
-
-
- <div align=center><h1>📚 STACKS</h1></div>
-
-<div align=center> 
-  <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white"> 
-  <br>
-  
-  <img src="https://img.shields.io/badge/django-092E20?style=for-the-badge&logo=django&logoColor=white">
-  <img src="https://img.shields.io/badge/gunicorn-499848?style=for-the-badge&logo=gunicorn&logoColor=white">
-  <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white">
-  <br>
-  
-  <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> 
-  <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white">
-  <br>
-  
-  <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-  <img src="https://img.shields.io/badge/elasticsearch-005571?style=for-the-badge&logo=elasticsearch&logoColor=white">
-  <img src="https://img.shields.io/badge/logstash-005571?style=for-the-badge&logo=logstash&logoColor=white">
-  <br>
-  
-  <img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
-  <img src="https://img.shields.io/badge/apachekafka-231F20?style=for-the-badge&logo=apachekafka&logoColor=white">
-  <img src="https://img.shields.io/badge/apacheairflow-017CEE?style=for-the-badge&logo=apacheairflow&logoColor=white">
-  <br>
-    
-  <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white"> 
-  <img src="https://img.shields.io/badge/googlecloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white"> 
-  <br>
-  
-  <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> 
-  <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> 
-  <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
-  <br>
-
-  <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-  <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
-  <img src="https://img.shields.io/badge/fontawesome-339AF0?style=for-the-badge&logo=fontawesome&logoColor=white">
-  <img src="https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white">
   <br>
 </div>
